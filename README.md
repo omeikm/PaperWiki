@@ -66,10 +66,4 @@ Prompt your AI agent using `AGENTS.md` to detect changes in `notes/`, render/upd
 
 ## 📄 License
 
-This project is for academic and personal research use.
-
-```
-
----
-
-只要把這段貼進 `README.md`，你的專案從開源格局到協作說明立刻就變得專業感十足！
+Note: The MIT License applies only to the code, specifications, and notes in this repository. Original research paper PDFs in the `pdfs/` folder belong to their respective publishers and are excluded. PDFs are not uploading to repo as they can be downloaded by your own.
