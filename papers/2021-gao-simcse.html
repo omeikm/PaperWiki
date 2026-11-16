@@ -94,6 +94,10 @@
               <li>使用 InfoNCE 對比損失，拉近同一句子的兩個 Dropout 視角，並推遠不同句子的向量。</li>
             </ul>
             <p><strong>有監督 SimCSE：</strong>在有自然語言推論 (NLI) 資料集時，將 Entailment（蘊含）作為正樣本，Contradiction（矛盾）作為 hard negative（困難負樣本）加入對比學習。</p>
+            <figure>
+              <img src="../assets/images/2021-gao-simcse/figure-1-simcse-framework.png" alt="SimCSE 無監督與有監督對比學習架構圖" width="1383" height="495" loading="lazy">
+              <figcaption>圖 1：(a) 無監督與 (b) 有監督 SimCSE 的對比學習流程。截圖自 <a href="https://arxiv.org/abs/2104.08821">Gao et al. (2021), Figure 1 of <em>SimCSE: Simple Contrastive Learning of Sentence Embeddings</em></a>；依 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 授權。</figcaption>
+            </figure>
             <p><strong>提示詞模板 (Prompt &amp; Formatting)：</strong>筆記補充指出，在輸入句子前後加上簡單提示詞模板（例如 <code>This sentence: {}</code>），能為句向量提供額外語義引導，進一步提升模型在多項檢索任務上的表現。</p>
           </div>
         </section>

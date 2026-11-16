@@ -27,6 +27,9 @@ LLM2Vec 的轉換過程包含三個輕量級步驟：
 2. **Masked Next-Token Prediction (MNTP)：** 透過類似 MLM 的任務對雙向注意力機制進行微調（Continued Pre-training），讓模型適應雙向資訊。
 3. **Unsupervised Contrastive Learning (SimCSE 延伸)：** 利用無監督對比學習微調句向量空間，拉近同義文本、推遠不同文本。
 
+![LLM2Vec 啟用雙向注意力、MNTP 與無監督對比學習的三步驟架構圖](../assets/images/2024-behnamghader-llm2vec/figure-1-llm2vec-pipeline.png)
+> **圖 1：** LLM2Vec 的三步驟流程：啟用雙向注意力、Masked Next-Token Prediction 與無監督對比學習。截圖自 BehnamGhader et al. (2024) 的 Figure 1，出自[論文 *LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders*](https://arxiv.org/abs/2404.03058)；依 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 授權。
+
 ## 4. 實驗與評估 (Experiments)
 * **評估基準：** MTEB (Massive Text Embedding Benchmark)，涵蓋檢索、分類、聚類等數十個任務。
 * **關鍵發現：**

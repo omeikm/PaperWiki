@@ -22,13 +22,16 @@
 ├── assets/
 │   ├── css/
 │   │   └── style.css          # 全站共用樣式表（定義 Warm Academic 色系、字體與便利貼特效）
+│   ├── images/                # 存放論文截圖資源
+│   │   └── [year]-[first-author]-[short-title]/
+│   │       └── figure.png
 │   └── js/                    # 模組化 JavaScript（依功能拆分，使用 ES Modules 或獨立引入）
 │       ├── filter.js          # 首頁 Tag 即時篩選邏輯
 │       ├── progress.js        # 單篇論文頂部閱讀進度條邏輯
 │       ├── mood-badge.js      # 研究生「閱讀狀態 / 心情印章」localStorage 狀態管理
 │       └── accordion.js       # 論文各章節（H2）展開與收合互動邏輯
 └── papers/                    # 存放最終生成的獨立論文筆記網頁
-    └── [year]-[first-author]-[short-title].html  # 檔名一律全小寫英文加連字號（例如：2025-wang-varcon.html）
+    └── [year]-[first-author]-[short-title].html  # 檔名一律全小寫英文加連字號（例如：2025-lee-example-paper.html）
 
 ```
 
@@ -51,6 +54,9 @@
 * **首頁卡片排版與對齊規範 (Card Alignment)：**
   * 首頁論文卡片網格（`.paper-grid`）內的每張卡片（`.paper-card`）必須採用**垂直 Flex 佈局**（`display: flex; flex-direction: column; justify-content: space-between; height: 100%;`）。
   * 卡片底部的作者與「閱讀筆記 ↗」連結列必須使用 `margin-top: auto;` 固定貼齊卡片最下方，確保無論標題或摘要行數多寡，同一列卡片的底部動作按鈕皆保持在同一水平線上。
+* **論文內圖片與圖說樣式 (Image Styling)：**
+  * 內文圖片（`.paper-content img`）必須置中、最大寬度 `90%`、帶有圓角 (`8px`)、溫潤暖灰邊框 (`#E6E2D8`) 與柔和陰影。
+  * 圖片下方圖說（`figcaption` / `blockquote`）需置中、字體縮小（`0.9rem`）且使用暖灰色（`#6E6A63`）。
 
 ---
 

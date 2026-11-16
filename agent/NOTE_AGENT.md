@@ -71,6 +71,10 @@
 
 ```
 
+* **圖片支援原則：** 閱讀 PDF 時若遇到關鍵架構圖或實驗曲線，盡可能以截圖為主，請將其存至 `assets/images/[year]-[first-author]-[short-title]/` 目錄下，並在對應的章節（如第 3 節或第 4 節）使用以下語法插入：
+  `![圖說描述](../assets/images/[year]-[first-author]-[short-title]/filename.png)`
+  `> **圖 X：** [圖說說明]`
+
 ---
 
 ## 4. 執行品質要求

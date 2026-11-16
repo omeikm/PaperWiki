@@ -27,7 +27,15 @@
   * **分類目標：** 將兩句向量 `u`、`v` 與逐元素差 `|u-v|` 串接後輸入 softmax 分類器，以 cross-entropy 訓練；論文在 NLI 資料上使用此設定。
   * **回歸目標：** 以兩句向量的 cosine similarity 預測相似度，使用 mean-squared error；適用於有相似度分數的資料。
   * **Triplet 目標：** 讓 anchor-positive 的距離比 anchor-negative 至少近一個 margin；論文使用 Euclidean distance，margin 設為 1。
+
+![SBERT 分類目標下共享編碼器與句向量組合流程示意圖](../assets/images/2019-reimers-sbert/figure-1-sbert-training.png)
+> **圖 1：** 分類訓練時，兩個句子經共享權重的編碼器與 pooling 轉成向量，再組合 `u`、`v`、`|u-v|` 進行分類；依據原論文 Figure 1 的方法描述重繪。
+
 * **推論與檢索：** 推論時，句子各自編碼一次後即可用 cosine similarity 排序；同一批句向量可重複用於不同的相似度查詢或聚類工作。
+
+![SBERT 推論時分別編碼句子並計算相似度的流程示意圖](../assets/images/2019-reimers-sbert/figure-2-sbert-inference.png)
+> **圖 2：** 推論時分別取得兩個句向量，再以 cosine similarity 計分；依據原論文 Figure 2 的方法描述重繪。
+
 * **訓練設定：** NLI 訓練結合 SNLI（約 570,000 對）與 MultiNLI（約 430,000 對），以三分類目標微調一個 epoch；論文採用 batch size 16、Adam、learning rate `2e-5`，並對前 10% 訓練資料線性 warm-up。
 
 ## 4. 實驗與評估 (Experiments)

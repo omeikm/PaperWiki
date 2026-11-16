@@ -633,6 +633,35 @@ button {
   color: var(--accent);
 }
 
+.paper-content figure {
+  margin: 22px 0;
+}
+
+.paper-content img {
+  display: block;
+  max-width: 90%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(58, 45, 32, 0.08);
+}
+
+.paper-content figcaption,
+.paper-content blockquote {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.paper-content figcaption {
+  margin-top: 10px;
+}
+
+.paper-content blockquote {
+  margin: 12px auto;
+}
+
 .section-body strong {
   color: var(--ink);
   font-weight: 600;

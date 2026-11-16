@@ -27,6 +27,10 @@
   * 優化目標為 InfoNCE 對比損失函數，拉近同一個句子的兩個 Dropout 視角，推遠不同句子的向量。
 * **有監督 SimCSE (Supervised SimCSE)：**
   * 若有自然語言推斷 (NLI) 資料集，可以把 Entailment（蘊含）當作正樣本，Contradiction（矛盾）當作硬負樣本（Hard Negatives）加入對比學習。
+
+![SimCSE 無監督與有監督對比學習架構圖](../assets/images/2021-gao-simcse/figure-1-simcse-framework.png)
+> **圖 1：** (a) 無監督與 (b) 有監督 SimCSE 的對比學習流程。截圖自 Gao et al. (2021) 的 Figure 1，出自[論文 *SimCSE: Simple Contrastive Learning of Sentence Embeddings*](https://arxiv.org/abs/2104.08821)；依 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 授權。
+
 * **💡 補充說明 (Prompt & Formatting)：** 
   * 實驗顯示，在輸入句子前後加上簡單的提示詞模板（例如 `"This sentence: {}"`）能為句向量帶來額外的語義引導，進一步提升模型在多項檢索任務上的表現。
 
