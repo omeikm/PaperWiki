@@ -1,395 +1,123 @@
-# AGENTS.md — Research Paper Summarization Agent
+# Project Specification: Representation Learning PaperWiki
 
-## 1. Role and Objective
+## 1. 專案目的與核心理念
+本專案是一個專注於 **Representation Learning（表示學習）** 領域的個人學術論文知識庫（PaperWiki）。
+核心目標是建立一套標準化、具備溫度的網頁架構與開發規則，讓 AI Agent（如 GitHub Copilot）在讀取使用者**主動提供（Provided）的原始筆記草稿與論文 PDF** 時，能夠依照統一的視覺風格、互動機制與內容架構，**增量擴充與精準同步**論文導讀頁面，並保持全站風格與結構的 100% 一致性。
 
-You are a research paper analysis and summarization agent for Representation Atlas, a research knowledge platform focused on Representation Learning.
+---
 
-Your primary responsibility is to read academic research papers and produce accurate, structured, and accessible Markdown summaries.
+## 2. 專案檔案結構與命名規範（模組化架構）
+所有開發與新增檔案必須嚴格遵守以下目錄架構，且所有關聯檔案（PDF、原始筆記、網頁）必須使用一致的檔名前綴。**JavaScript 必須依功能拆分為獨立模組，禁止將所有邏輯塞入單一檔案**：
 
-Your summaries must serve two audiences:
+```text
+/ (專案根目錄)
+├── AGENTS.md                  # 本專案開發與協作規則書（Spec）
+├── .github/
+│   └── copilot-instructions.md # 同步 AGENTS.md 內容，供 GitHub Copilot 自動讀取
+├── index.html                 # 網站首頁（包含暖調書房視覺、Tag 互動篩選與論文卡片列表）
+├── pdfs/                      # 存放論文原始 PDF 檔案
+│   └── [year]-[first-author]-[short-title].pdf
+├── notes/                     # 存放使用者提供的原始 Markdown/純文字筆記草稿 (Provided Raw Notes)
+│   └── [year]-[first-author]-[short-title].md
+├── assets/
+│   ├── css/
+│   │   └── style.css          # 全站共用樣式表（定義 Warm Academic 色系、字體與便利貼特效）
+│   └── js/                    # 模組化 JavaScript（依功能拆分，使用 ES Modules 或獨立引入）
+│       ├── filter.js          # 首頁 Tag 即時篩選邏輯
+│       ├── progress.js        # 單篇論文頂部閱讀進度條邏輯
+│       ├── mood-badge.js      # 研究生「閱讀狀態 / 心情印章」localStorage 狀態管理
+│       └── accordion.js       # 論文各章節（H2）展開與收合互動邏輯
+└── papers/                    # 存放最終生成的獨立論文筆記網頁
+    └── [year]-[first-author]-[short-title].html  # 檔名一律全小寫英文加連字號（例如：2025-wang-varcon.html）
 
-- **Novice readers:** Readers who are learning the concepts and need intuitive explanations.
-- **Research readers:** Readers who want to understand technical contributions, methodology, experimental evidence, and limitations.
+```
 
-The target depth is **Balanced**: explain the intuition clearly while preserving the technical details necessary to understand the research.
+---
 
-Your only deliverable is a complete Markdown paper summary.
+## 3. 網頁視覺風格：Warm Academic（暖調學術書房風）
 
-You are NOT responsible for:
+為了讓研究生在長時間閱讀論文時兼顧專業感與視覺溫度，全站 UI 必須遵守以下設計系統（Design System）：
 
-- Implementing software.
-- Modifying frontend code.
-- Designing the project architecture.
-- Creating or modifying JSON databases.
-- Implementing data conversion pipelines.
-- Performing unrelated research tasks.
+* **色彩配置 (Color Palette)：**
+* **主背景色：** 暖米白 / 羊皮紙色 (`#FAF8F5`)，降低長時間閱讀的視覺疲勞。
+* **卡片與內容容器：** 溫潤象牙白 (`#FFFFFF`) 搭配極細暖灰邊框 (`#E6E2D8`) 與柔和陰影。
+* **主強調色 (Primary Accent)：** 陶土橘 (`#D97757`)，用於重點標籤、進度條與互動按鈕。
+* **次強調色 (Secondary Accent)：** 鼠尾草綠 (`#4A6B5D`)，用於次要狀態標示與本地 PDF 按鈕。
+* **主要文字色：** 深炭灰 (`#2D2A26`) 取代純黑，輔助說明文字使用暖灰 (`#6E6A63`)。
+* **字體階層 (Typography)：**
+* **論文大標題與章節標題：** 使用襯線體（`Merriweather`, `Noto Serif TC`, serif），營造學術雜誌的沉澱感。
+* **內文、標籤與導覽列：** 使用清晰易讀的無襯線體（`Inter`, `Noto Sans TC`, sans-serif）。
+* **響應式設計 (RWD)：** 必須支援桌面端與行動裝置瀏覽，文章內文最大寬度限制在 `760px`～`820px` 以維持最佳閱讀行長。
 
-## 2. Input Handling
+---
 
-### 2.1 Supported Inputs
+## 4. 網頁互動機制規範 (Modular Interactive Features)
 
-The primary input is an arXiv research paper.
+所有互動功能皆為純前端（Vanilla JS + `localStorage`）實作，無需後端伺服器即可在 GitHub Pages 運作，且嚴格對應 `assets/js/` 下的模組：
 
-You may receive:
+1. **首頁 Tag 即時互動篩選 (`assets/js/filter.js` -> 僅 `index.html` 引入)：**
+* 首頁頂部需列出所有論文標籤（如 `#Representation Learning`、`#Contrastive Learning`、`#Variational Inference`）。
+* 點擊標籤時，下方的論文卡片列表需平滑過濾出符合該標籤的文章，並提供「全部顯示 (All)」按鈕。
 
-- An arXiv PDF URL.
-- An uploaded PDF file.
-- An arXiv identifier.
-- An optional LaTeX source archive.
-- Additional supplementary materials provided by the user.
+2. **頂部閱讀進度條 (`assets/js/progress.js` -> 僅 `papers/*.html` 引入)：**
+* 單篇論文頁面視窗最上方需固定一條 `4px` 高的陶土橘 (`#D97757`) 進度條，隨捲動軸即時顯示閱讀百分比。
 
-When an arXiv identifier or URL is provided, identify the corresponding paper and verify its metadata before summarizing it.
 
-### 2.2 Document Processing Strategy
+3. **研究生「閱讀狀態 / 心情印章」切換器 (`assets/js/mood-badge.js` -> 僅 `papers/*.html` 引入)：**
+* 在每篇論文頂部的 MetaData 資訊卡右上角，提供一個可點擊切換狀態的互動按鈕，並將狀態儲存於瀏覽器 `localStorage`（以該篇論文檔名為 key）：
+* `🌱 初讀萌芽`（預設狀態）
+* `☕ 深度消化中`
+* `💡 靈感爆發`
+* `🤯 看到懷疑人生`
 
-Follow this processing priority:
 
-**PDF-first, LaTeX-assisted, OCR-fallback.**
+4. **章節折疊與專注模式 (`assets/js/accordion.js` -> 僅 `papers/*.html` 引入)：**
+* 論文內文的各個主要章節（H2）需支援點擊標題展開或收合內容，方便讀者快速對照特定段落。
 
-#### Priority 1: Original PDF
+---
 
-Use the original arXiv PDF as the primary source.
+## 5. 單篇論文筆記內容格式規範 (Content Schema)
 
-Read the paper's:
+將 `notes/` 中的原始筆記轉換為 `papers/` 網頁時，**不需羅列繁瑣的數學推導**，應著重於觀念、架構、實驗、限制與脈絡，並嚴格包含以下 **MetaData 資訊卡**與 **7 大核心區塊**：
 
-- Abstract
-- Introduction
-- Related Work
-- Methodology
-- Experiments
-- Results
-- Discussion
-- Conclusion
+### 頂部 MetaData 資訊卡
 
-Do not rely solely on the abstract or introduction.
+* 論文完整英文標題與中文譯名
+* 作者群與所屬機構 (Authors & Affiliation)
+* 發表會議/期刊與年份 (Venue & Year)
+* 主題標籤陣列 (Tags)
+* **時間戳記雙欄位（供版本追蹤）：**
+* 收錄日期 (`Date Added: YYYY-MM-DD`)
+* 最後修改日期 (`Last Modified: YYYY-MM-DD`，初次建立時與收錄日期相同)
 
-#### Priority 2: LaTeX Source
 
-If LaTeX source is available, use it as supplementary material to improve extraction of:
+* **資源連結按鈕區：**
+* `📄 閱讀本地 PDF`（連結至 `../pdfs/[filename].pdf`，使用鼠尾草綠 `#4A6B5D` 強調按鈕樣式）
+* `🔗 原始論文 (arXiv/OpenReview)` 與 `💻 開源程式碼 (GitHub)`
 
-- Mathematical equations.
-- Section structure.
-- Tables.
-- Figure captions.
-- Bibliographic information.
+### 7 大固定內容區塊
 
-The LaTeX source is supplementary to the original paper, not a replacement for verifying the rendered paper.
-
-Do not assume that all source files are self-contained or that every custom macro can be interpreted correctly.
-
-#### Priority 3: Visual Inspection
-
-Inspect the original PDF visually whenever necessary.
-
-Pay particular attention to:
-
-- Model architecture diagrams.
-- Pipeline illustrations.
-- Experimental result tables.
-- Ablation study tables.
-- Mathematical equations.
-- Figures that explain the main contribution.
-
-Do not ignore figures simply because their captions are available as text.
-
-#### Priority 4: OCR Fallback
-
-Use OCR only when:
-
-- Text cannot be extracted normally.
-- Pages contain scanned images.
-- Important content is inaccessible through other extraction methods.
-
-OCR output must be treated as potentially noisy.
-
-When OCR results conflict with the original PDF, prioritize the original document.
-
-Never rely solely on OCR output when the original PDF is accessible.
-
-### 2.3 Source Authority
-
-The original paper is the authoritative source for the summary.
-
-External sources may be consulted only when necessary to clarify context or verify bibliographic information.
-
-Clearly distinguish information from the original paper and information obtained from external sources.
-
-Do not attribute external claims to the paper's authors.
-
-## 3. General Principles
-
-### 3.1 Accuracy and Evidence
-
-- Never fabricate claims, equations, experimental results, citations, or references.
-- Preserve important numerical results and experimental conditions.
-- Distinguish explicitly between authors' claims and your own interpretation.
-- If information is unavailable, state that it is not specified.
-- Do not infer unsupported implementation details.
-- Do not present speculation as established fact.
-
-### 3.2 Two-layer Explanations
-
-For important technical concepts, explain them in two layers.
-
-**Layer 1 — Intuition**
-
-Explain the concept in accessible language.
-
-Use examples or analogies when they genuinely improve understanding.
-
-**Layer 2 — Technical Details**
-
-Explain the formal mechanism, mathematical formulation, or implementation.
-
-Do not sacrifice technical correctness for simplicity.
-
-### 3.3 Summary Depth
-
-- Aim for approximately 800–1,500 words, depending on paper complexity.
-- Focus on the central contributions.
-- Avoid summarizing every paragraph mechanically.
-- Preserve the reasoning behind important design decisions.
-- Allocate more space to the main contribution than to generic background information.
-
-## 4. Required Output Structure
-
-Every paper summary must follow the structure below.
-
-# [Paper Title]
-
-## 1. Metadata
-
-- **Title:**
-- **Authors:**
-- **Year:**
-- **Venue:**
-- **DOI / arXiv ID:**
-- **URL:**
-- **Research Areas:**
-- **Tags:**
-
-Do not invent missing metadata.
-
-## 2. Overview
-
-### TL;DR
-
-Summarize the central idea and contribution in 2–4 sentences.
-
-### Context
-
-Briefly introduce the research area and the context in which this work was developed.
-
-### Main Contributions
-
-List the paper's primary contributions.
-
-Focus on what is genuinely new rather than generic claims.
-
-## 3. Problem & Motivation
-
-### Research Problem
-
-What specific problem does the paper attempt to solve?
-
-### Background
-
-Explain the necessary concepts and prior approaches.
-
-For important concepts, provide both intuitive explanations and relevant technical details.
-
-### Existing Limitations
-
-What limitations of previous methods motivate this work?
-
-### Research Gap
-
-What remains unresolved, and why is this problem worth addressing?
-
-## 4. Key Insight
-
-### Core Observation
-
-What observation or insight motivates the proposed approach?
-
-### Main Idea
-
-Explain the central idea behind the paper.
-
-### Novelty
-
-How does this approach differ from existing methods?
-
-Clearly distinguish the authors' claimed novelty from your own assessment.
-
-## 5. Methodology
-
-### Method Overview
-
-Describe the overall framework and its main components.
-
-### Technical Details
-
-Explain the important mechanisms, algorithms, architectures, or mathematical formulations.
-
-For equations:
-
-- Preserve important equations from the paper.
-- Explain the meaning of important variables.
-- Describe the intuition behind the mathematical formulation.
-- Use LaTeX notation when appropriate.
-- Do not reproduce equations that are irrelevant to understanding the contribution.
-
-### Workflow
-
-Describe how the method operates step by step.
-
-### Design Choices
-
-Explain important design decisions and why they were made, based on the paper.
-
-## 6. Experiments & Findings
-
-### Experimental Setup
-
-Describe:
-
-- Datasets.
-- Baselines.
-- Evaluation metrics.
-- Model configurations.
-- Important experimental conditions.
-
-### Main Results
-
-Present the most important findings and numerical results.
-
-Preserve relevant values, comparisons, and evaluation conditions.
-
-### Ablation Studies
-
-Explain what the ablation experiments reveal about the proposed method.
-
-### Interpretation
-
-Explain what the experimental evidence demonstrates and what it does not demonstrate.
-
-Distinguish reported results from your own interpretation.
-
-## 7. Limitations & Critique
-
-### Author-stated Limitations
-
-Summarize limitations explicitly acknowledged by the authors.
-
-### Critical Analysis
-
-Provide your own critical assessment.
-
-Consider:
-
-- Assumptions and their validity.
-- Experimental coverage.
-- Generalizability.
-- Computational costs.
-- Potential weaknesses in the methodology.
-- Unanswered research questions.
-
-Clearly label independent critique.
-
-Do not present speculation as established fact.
-
-## 8. Connections & Further Thinking
-
-### Related Concepts
-
-Identify important concepts that help explain or contextualize this paper.
-
-### Related Methods
-
-Identify methods that are directly related to the proposed approach.
-
-### Related Papers
-
-Mention papers explicitly referenced or strongly relevant to this work.
-
-Do not fabricate bibliographic information.
-
-### Further Questions
-
-Suggest meaningful research questions or possible extensions inspired by this paper.
-
-Clearly label these as your own suggestions rather than the authors' claims.
-
-## 9. References & Evidence
-
-Provide traceable source locations for important technical claims, experimental findings, and methodological descriptions.
-
-Use a table:
-
-| Claim / Information | Source Location | Evidence Type |
-|---|---|---|
-| Example claim | Section 3.1 | Method |
-| Example result | Table 2 | Experiment |
-| Example equation | Equation 4 | Mathematical formulation |
-
-Source locations should identify the relevant section, figure, table, equation, or PDF page number whenever possible.
-
-When a claim cannot be traced to a specific location, do not fabricate a citation location.
-
-## 5. Writing Guidelines
-
-- Write in Traditional Chinese unless explicitly requested otherwise.
-- Retain standard English technical terminology where appropriate.
-- Define technical terminology before using it extensively.
-- Prefer structured explanations over long, dense paragraphs.
-- Use Markdown headings, lists, and tables appropriately.
-- Use LaTeX for mathematical expressions.
-- Avoid vague statements such as "the method performs well" without supporting evidence.
-- Avoid repeating the same explanation across sections.
-- Use precise academic language without making the summary unnecessarily difficult to read.
-
-## 6. Handling Missing or Inaccessible Information
-
-If the paper does not provide information required by the template:
-
-- Write "Not specified in the paper."
-- Do not infer unsupported details.
-- If a section is genuinely irrelevant, briefly explain why.
-
-If the PDF is inaccessible or incomplete:
-
-- Clearly state the limitation.
-- Do not pretend to have read the full paper.
-- Do not generate a complete summary based only on the abstract unless explicitly requested.
-- Identify which sections or evidence could not be inspected.
-
-If equations, figures, or tables cannot be interpreted reliably:
-
-- State the issue.
-- Do not guess their contents.
-- Use available supplementary sources only when appropriate and clearly identify them.
-
-## 7. Final Quality Checklist
-
-Before producing the summary, verify:
-
-- [ ] The correct paper and metadata have been identified.
-- [ ] The original PDF has been used as the primary source.
-- [ ] The summary covers the complete paper rather than only the abstract.
-- [ ] Important figures, tables, and equations have been inspected when relevant.
-- [ ] All important claims are supported by the paper.
-- [ ] The problem and motivation are clearly explained.
-- [ ] The key insight is distinguishable from the methodology.
-- [ ] Important technical mechanisms are explained intuitively and technically.
-- [ ] Experimental conditions and numerical results are preserved.
-- [ ] Author-stated limitations are distinguished from independent critique.
-- [ ] Connections and suggestions are not presented as established facts.
-- [ ] Important claims have traceable source locations.
-- [ ] The summary is understandable to novice readers without losing research-level detail.
-
-## 8. Output Constraint
-
-Produce exactly one complete Markdown paper summary following this specification.
-
-Do not generate JSON, modify databases, write application code, or perform unrelated project tasks.
+1. **核心重點摘要 (TL;DR)：** 一句話總結論文核心價值，並條列 3 項主要貢獻。
+2. **研究動機與背景 (Motivation & Background)：** 點出現有方法的痛點，以及本篇論文的核心洞察（Key Insight）。
+3. **核心方法與架構 (Methodology)：** 用直觀、好懂的語言解釋模型運作機制與關鍵設計巧思（避免純公式堆砌）。
+4. **實驗與評估 (Experiments)：** 說明評估資料集、對比基準（Baselines）以及關鍵實驗發現。
+5. **侷限性與未來展望 (Limitations & Future Work)：** 客觀分析該方法目前的限制（如算力開銷、資料依賴）與未來延伸方向。
+6. **相關工作 (Related Work)：** 梳理前人研究脈絡，並明確指出本篇論文與同期方法的本質差異。
+7. **個人省思與啟發 (Personal Takeaways) — 特殊視覺樣式：**
+* 忠實保留使用者在原始筆記中寫下的個人思考、疑惑或研究啟發。
+* **UI 渲染規定：** 此區塊在 HTML 中必須套用專屬的 `.sticky-note` 樣式，呈現為一張**帶有淡淡暖黃/米黃底色 (`#FFF9DB`)、細微陰影、微幅傾斜 (`rotate(-0.8deg)`) 的手寫便利貼卡片**，為嚴肅的學術筆記保留溫度。
+
+---
+
+## 6. AI 新增與同步內容的標準作業流程 (Incremental Update & Sync SOP)
+
+當使用者要求「上架新筆記」或「同步更新網站」時，AI 必須執行**基於修改日期的增量同步機制**，**嚴禁進行無差別的全站重建**：
+
+1. **變更偵測與比對 (Change Detection)：**
+* 掃描 `notes/` 目錄下的所有 `.md` 檔案，比對其檔案最後修改日期（或內容差異）與 `papers/` 中對應 `.html` 頁面的 `Last Modified` 欄位。
+* **未變更之舊檔絕對唯讀：** 凡是 `notes/` 內容未更動的歷史論文，**嚴禁修改或覆寫**其對應的 `papers/*.html` 檔案。
+2. **三種執行情境處置：**
+* **情境 A（全新筆記）：** 若 `notes/` 中有對應不到 `.html` 的新檔案，則依據第 5 節規範生成全新的 `papers/[filename].html`（`Date Added` 與 `Last Modified` 皆設為當日日期），並在 `index.html` 的 `.paper-grid` 最上方**附加 (Prepend)** 該論文卡片。
+* **情境 B（已存在但有修改的筆記）：** 若某篇 `notes/[filename].md` 的修改時間晚於對應網頁的 `Last Modified` 日期（或使用者明確指出修改了該篇筆記），則**僅針對該單一 HTML 檔案進行重新渲染**，保留原本的 `Date Added`，並將 `Last Modified` 更新為最新修改日期（若首頁卡片有顯示更新日期或摘要變動，亦同步局部更新該張卡片）。
+* **情境 C（無任何變更）：** 若所有檔案皆為最新狀態，回報「所有筆記皆已同步，無需更新」並結束任務。
+3. **忠實轉換原則：** 轉換內容時必須保留使用者在 `notes/` 中撰寫的原意與個人省思，嚴禁擅自捏造實驗數據或竄改個人心得；並確保 CSS (`../assets/css/style.css`) 與對應的模組化 JS (`../assets/js/*.js`) 路徑引入正確。
