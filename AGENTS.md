@@ -48,6 +48,9 @@
 * **論文大標題與章節標題：** 使用襯線體（`Merriweather`, `Noto Serif TC`, serif），營造學術雜誌的沉澱感。
 * **內文、標籤與導覽列：** 使用清晰易讀的無襯線體（`Inter`, `Noto Sans TC`, sans-serif）。
 * **響應式設計 (RWD)：** 必須支援桌面端與行動裝置瀏覽，文章內文最大寬度限制在 `760px`～`820px` 以維持最佳閱讀行長。
+* **首頁卡片排版與對齊規範 (Card Alignment)：**
+  * 首頁論文卡片網格（`.paper-grid`）內的每張卡片（`.paper-card`）必須採用**垂直 Flex 佈局**（`display: flex; flex-direction: column; justify-content: space-between; height: 100%;`）。
+  * 卡片底部的作者與「閱讀筆記 ↗」連結列必須使用 `margin-top: auto;` 固定貼齊卡片最下方，確保無論標題或摘要行數多寡，同一列卡片的底部動作按鈕皆保持在同一水平線上。
 
 ---
 

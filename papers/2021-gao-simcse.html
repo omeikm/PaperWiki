@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FAF8F5">
+  <meta name="description" content="SimCSE: Simple Contrastive Learning of Sentence Embeddings 論文導讀與個人筆記。">
+  <title>SimCSE: Simple Contrastive Learning of Sentence Embeddings — PaperWiki</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="module" src="../assets/js/progress.js"></script>
+  <script type="module" src="../assets/js/mood-badge.js"></script>
+  <script type="module" src="../assets/js/accordion.js"></script>
+</head>
+<body class="paper-page">
+  <div class="reading-progress" role="progressbar" aria-label="閱讀進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="reading-progress-bar"></div>
+  </div>
+  <header class="paper-header">
+    <a class="back-link" href="../index.html">← 回到 PaperWiki 書架</a>
+  </header>
+
+  <main class="paper-main">
+    <article>
+      <header class="metadata-card">
+        <button class="mood-badge" type="button" data-mood-badge data-paper-id="2021-gao-simcse">🌱 初讀萌芽</button>
+        <p class="eyebrow"><span class="eyebrow-rule"></span> PAPER NOTE · REPRESENTATION LEARNING</p>
+        <h1 class="paper-title">SimCSE: Simple Contrastive Learning of Sentence Embeddings</h1>
+        <p class="paper-title-translation">SimCSE：簡單對比式句向量學習</p>
+
+        <div class="metadata-grid">
+          <div class="metadata-item">
+            <span class="metadata-label">Authors &amp; Affiliation</span>
+            <span class="metadata-value">Tianyu Gao, Xingcheng Yao, Danqi Chen · Princeton University</span>
+          </div>
+          <div class="metadata-item">
+            <span class="metadata-label">Venue &amp; Year</span>
+            <span class="metadata-value">EMNLP 2021</span>
+          </div>
+          <div class="metadata-item">
+            <span class="metadata-label">Date Added</span>
+            <span class="metadata-value"><time datetime="2026-11-16">2026-11-16</time></span>
+          </div>
+          <div class="metadata-item">
+            <span class="metadata-label">Last Modified</span>
+            <span class="metadata-value"><time datetime="2026-11-16">2026-11-16</time></span>
+          </div>
+        </div>
+
+        <div class="paper-tags" aria-label="主題標籤">
+          <span class="paper-tag">Representation Learning</span>
+          <span class="paper-tag">Contrastive Learning</span>
+          <span class="paper-tag">Sentence Embeddings</span>
+          <span class="paper-tag">NLP</span>
+        </div>
+
+        <nav class="resource-links" aria-label="論文資源">
+          <a class="resource-link resource-link-pdf" href="../pdfs/2021-gao-simcse.pdf">📄 閱讀本地 PDF</a>
+          <a class="resource-link" href="https://arxiv.org/abs/2104.08821" target="_blank" rel="noopener noreferrer">🔗 原始論文 (arXiv)</a>
+          <a class="resource-link" href="https://github.com/princeton-nlp/SimCSE" target="_blank" rel="noopener noreferrer">💻 開源程式碼 (GitHub)</a>
+        </nav>
+      </header>
+
+      <div class="paper-content">
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-tldr">1. 核心重點摘要 (TL;DR)</button></h2>
+          <div class="section-body" id="section-tldr">
+            <p><strong>核心價值：</strong>提出一種簡單卻有效的對比學習框架 SimCSE，利用預訓練語言模型的 Dropout 作為自然的資料增強，大幅提升無監督與有監督句向量 (Sentence Embeddings) 的表現。</p>
+            <p><strong>主要貢獻：</strong></p>
+            <ol>
+              <li>設計無監督對比學習方法：將同一個句子通過帶有 Dropout 的 Transformer 兩次，視為正樣本對。</li>
+              <li>指出預訓練語言模型的空間分佈存在「坍塌（Alignment &amp; Uniformity）」問題，並展示對比學習能有效校正此現象。</li>
+              <li>在多個 Semantic Textual Similarity (STS) 任務上達到當時的 SOTA，超越許多複雜的資料增強方法。</li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-motivation">2. 研究動機與背景 (Motivation &amp; Background)</button></h2>
+          <div class="section-body" id="section-motivation">
+            <p><strong>研究痛點：</strong>以往直接從 BERT 等預訓練語言模型抽取句向量（例如直接取 [CLS] 或平均 pooling）的效果往往很差，甚至不如 GloVe 詞向量平均。過去方法依賴刪除單詞、同義詞替換等複雜資料增強，但這些操作容易破壞語義。</p>
+            <p><strong>核心洞察 (Key Insight)：</strong>預訓練 Transformer 內建的 <strong>Dropout</strong> 本身就是一種自然的微擾動。不需要改動架構，只要將同一個句子輸入模型兩次，透過不同的 Dropout 遮罩即可產生兩個正樣本表示。</p>
+          </div>
+        </section>
+
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-method">3. 核心方法與架構 (Methodology)</button></h2>
+          <div class="section-body" id="section-method">
+            <p><strong>無監督 SimCSE：</strong></p>
+            <ul>
+              <li>給定輸入句 <em>x</em>，將它送入編碼器兩次，得到兩個不同的向量表示 <em>h<sub>i</sub></em> 與 <em>h<sub>i</sub>′</em>；Dropout 的隨機遮罩使兩次表示產生差異。</li>
+              <li>使用 InfoNCE 對比損失，拉近同一句子的兩個 Dropout 視角，並推遠不同句子的向量。</li>
+            </ul>
+            <p><strong>有監督 SimCSE：</strong>在有自然語言推論 (NLI) 資料集時，將 Entailment（蘊含）作為正樣本，Contradiction（矛盾）作為 hard negative（困難負樣本）加入對比學習。</p>
+            <p><strong>提示詞模板 (Prompt &amp; Formatting)：</strong>筆記補充指出，在輸入句子前後加上簡單提示詞模板（例如 <code>This sentence: {}</code>），能為句向量提供額外語義引導，進一步提升模型在多項檢索任務上的表現。</p>
+          </div>
+        </section>
+
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-experiments">4. 實驗與評估 (Experiments)</button></h2>
+          <div class="section-body" id="section-experiments">
+            <p><strong>評估基準：</strong>7 個標準 Semantic Textual Similarity (STS) 任務，涵蓋 STS-12 至 STS-18。</p>
+            <p><strong>關鍵發現：</strong></p>
+            <ul>
+              <li>無監督設定下，SimCSE 在 STS 任務的平均表現較以往方法提升 2–4 個百分點（Spearman's correlation）。</li>
+              <li>實驗顯示對比學習能改善句向量分佈的 <strong>Alignment（對齊性）</strong>與 <strong>Uniformity（均勻性）</strong>。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-limitations">5. 侷限性與未來展望 (Limitations &amp; Future Work)</button></h2>
+          <div class="section-body" id="section-limitations">
+            <p><strong>侷限性：</strong>方法依賴強大的基礎預訓練模型（如 RoBERTa / BERT）；若基底模型表現不足，效果也會受限。此外，對比學習對 batch size 大小具有一定依賴性。</p>
+            <p><strong>未來方向：</strong>探索將此類簡單高效的表示學習方法擴展到多語言模型，或結合大型語言模型 (LLM) 的內嵌表示。</p>
+          </div>
+        </section>
+
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-related">6. 相關工作 (Related Work)</button></h2>
+          <div class="section-body" id="section-related">
+            <p>與 Word2Vec、Sent2Vec 等靜態向量不同，SimCSE 專注於利用上下文動態模型 (Contextualized Embeddings)。</p>
+            <p>相較於 IS-BERT、CT-BERT 等先前的對比式句子表示方法，SimCSE 不需要額外的語義替換模型或複雜架構，展現出簡單直接的設計。</p>
+          </div>
+        </section>
+
+        <section class="paper-section takeaways sticky-note">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-takeaways">7. 個人省思與啟發 (Personal Takeaways)</button></h2>
+          <div class="section-body" id="section-takeaways">
+            <p><strong>研究省思：</strong> 這篇論文給我的最大啟發是——<strong>「最厲害的方法往往最簡單」</strong>。大家都在絞盡腦汁想怎麼做複雜的資料增強（Data Augmentation），結果作者回頭審視模型本身的 Dropout，就挖出了金礦。做 Research 時不要總覺得非得搞得很複雜才行。</p>
+            <p><strong>🚀 最新補充：</strong> 這種利用內部 Dropout 作為微擾動的想法，其實也啟發了後續許多大型語言模型在微調時的抗過擬合策略。</p>
+          </div>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <footer class="paper-footer">
+    <a href="../index.html">← PaperWiki 書架</a>
+    <span>Last updated <time datetime="2026-11-16">2026-11-16</time></span>
+  </footer>
+</body>
+</html>
