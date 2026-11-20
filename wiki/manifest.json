@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-11-20T11:30:15.627777+00:00",
+  "total_notes": 7,
+  "notes": [
+    {
+      "id": "2019-reimers-sbert",
+      "filename": "2019-reimers-sbert.md",
+      "path": "notes/2019-reimers-sbert.md",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "year": "2019",
+      "venue_and_year": "Proceedings of EMNLP-IJCNLP 2019",
+      "tags": "#Representation Learning, #Sentence Embeddings, #Siamese Networks, #NLP",
+      "synthesis_citation_count": 6
+    },
+    {
+      "id": "2021-gao-simcse",
+      "filename": "2021-gao-simcse.md",
+      "path": "notes/2021-gao-simcse.md",
+      "title": "SimCSE: Simple Contrastive Learning of Sentence Embeddings",
+      "year": "2021",
+      "venue_and_year": "EMNLP 2021",
+      "tags": "#Representation Learning, #Contrastive Learning, #Sentence Embeddings, #NLP",
+      "synthesis_citation_count": 6
+    },
+    {
+      "id": "2023-cunningham-sae",
+      "filename": "2023-cunningham-sae.md",
+      "path": "notes/2023-cunningham-sae.md",
+      "title": "Sparse Autoencoders Find Highly Interpretable Features in Language Models",
+      "year": "2023",
+      "venue_and_year": "arXiv 2023",
+      "tags": "#Sparse Autoencoders, #Mechanistic Interpretability, #Superposition, #Feature Dictionaries",
+      "synthesis_citation_count": 8
+    },
+    {
+      "id": "2023-li-iti",
+      "filename": "2023-li-iti.md",
+      "path": "notes/2023-li-iti.md",
+      "title": "Inference-Time Intervention: Eliciting Truthful Answers from a Language Model",
+      "year": "2023",
+      "venue_and_year": "NeurIPS 2023",
+      "tags": "#Representation Learning, #AI Safety, #Truthfulness, #Activation Editing",
+      "synthesis_citation_count": 6
+    },
+    {
+      "id": "2023-zou-repe",
+      "filename": "2023-zou-repe.md",
+      "path": "notes/2023-zou-repe.md",
+      "title": "Representation Engineering: A Top-Down Approach to AI Transparency",
+      "year": "2023",
+      "venue_and_year": "arXiv 2023; manuscript v4 March 2025",
+      "tags": "#Representation Engineering, #Mechanistic Interpretability, #AI Transparency, #AI Safety",
+      "synthesis_citation_count": 11
+    },
+    {
+      "id": "2024-arditi-refusal",
+      "filename": "2024-arditi-refusal.md",
+      "path": "notes/2024-arditi-refusal.md",
+      "title": "Refusal in Language Models Is Mediated by a Single Direction",
+      "year": "2024",
+      "venue_and_year": "NeurIPS 2024",
+      "tags": "#AI Safety, #Mechanistic Interpretability, #Representation Engineering, #LLM Jailbreak",
+      "synthesis_citation_count": 6
+    },
+    {
+      "id": "2024-behnamghader-llm2vec",
+      "filename": "2024-behnamghader-llm2vec.md",
+      "path": "notes/2024-behnamghader-llm2vec.md",
+      "title": "LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders",
+      "year": "2024",
+      "venue_and_year": "2024",
+      "tags": "#Representation Learning, #Large Language Models, #Text Embeddings, #NLP",
+      "synthesis_citation_count": 6
+    }
+  ]
+}

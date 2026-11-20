@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FAF8F5">
+  <meta name="description" content="Inference-Time Intervention: Eliciting Truthful Answers from a Language Model 論文導讀與個人筆記。">
+  <title>Inference-Time Intervention: Eliciting Truthful Answers from a Language Model — PaperWiki</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script type="module" src="../assets/js/progress.js"></script>
+  <script type="module" src="../assets/js/mood-badge.js"></script>
+  <script type="module" src="../assets/js/accordion.js"></script>
+</head>
+<body class="paper-page">
+  <div class="reading-progress" role="progressbar" aria-label="閱讀進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="reading-progress-bar"></div></div>
+  <header class="paper-header"><a class="back-link" href="../index.html">← 回到 PaperWiki 書架</a></header>
+  <main class="paper-main">
+    <article>
+      <header class="metadata-card">
+        <button class="mood-badge" type="button" data-mood-badge data-paper-id="2023-li-iti">🌱 初讀萌芽</button>
+        <p class="eyebrow"><span class="eyebrow-rule"></span> PAPER NOTE · REPRESENTATION LEARNING</p>
+        <h1 class="paper-title">Inference-Time Intervention: Eliciting Truthful Answers from a Language Model</h1>
+        <p class="paper-title-translation">推論時干預：引出語言模型的真實回答</p>
+        <div class="metadata-grid">
+          <div class="metadata-item"><span class="metadata-label">Authors &amp; Affiliation</span><span class="metadata-value">Kenneth Li, Oam Patel, Fernanda Viégas, Hanspeter Pfister, Martin Wattenberg · Harvard University</span></div>
+          <div class="metadata-item"><span class="metadata-label">Venue &amp; Year</span><span class="metadata-value">NeurIPS 2023</span></div>
+          <div class="metadata-item"><span class="metadata-label">Date Added</span><span class="metadata-value"><time datetime="2026-11-20">2026-11-20</time></span></div>
+          <div class="metadata-item"><span class="metadata-label">Last Modified</span><span class="metadata-value"><time datetime="2026-11-20">2026-11-20</time></span></div>
+        </div>
+        <div class="paper-tags" aria-label="主題標籤"><span class="paper-tag">Representation Learning</span><span class="paper-tag">AI Safety</span><span class="paper-tag">Truthfulness</span><span class="paper-tag">Activation Editing</span></div>
+        <nav class="resource-links" aria-label="論文資源">
+          <a class="resource-link resource-link-pdf" href="../pdfs/2023-li-iti.pdf">📄 閱讀本地 PDF</a>
+          <a class="resource-link" href="https://arxiv.org/abs/2306.03341" target="_blank" rel="noopener noreferrer">🔗 原始論文 (arXiv)</a>
+          <a class="resource-link" href="https://github.com/likenneth/honest_llama" target="_blank" rel="noopener noreferrer">💻 開源程式碼 (GitHub)</a>
+        </nav>
+      </header>
+      <div class="paper-content">
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-tldr">1. 核心重點摘要 (TL;DR)</button></h2>
+          <div class="section-body" id="section-tldr"><p><strong>核心價值：</strong>提出 Inference-Time Intervention（ITI），透過在少數 attention heads 的 activation 空間加入 truthfulness 方向，提升 LLM 在 TruthfulQA 上產生真實回答的能力。</p><p><strong>主要貢獻：</strong></p><ol><li>使用線性 probe 找出與 truthfulness 相關的 heads 與方向。</li><li>在 inference 時只對部分高準確率 heads 做 activation shift，並在 autoregressive generation 中重複干預。</li><li>展示 ITI 可以少量資料、低計算成本提升真實度，但與 helpfulness 有取捨。</li></ol></div>
+        </section>
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-motivation">2. 研究動機與背景 (Motivation &amp; Background)</button></h2>
+          <div class="section-body" id="section-motivation"><p><strong>研究痛點：</strong>LLM 有時產生看似正確但實際錯誤或 hallucinated 的回答；中間 activation 可能已包含正確資訊，但未被輸出充分 elicited。</p><p><strong>核心洞察 (Key Insight)：</strong>模型 activation 空間可能存在可分辨真實與錯誤陳述的 direction；沿方向移動 activation 可縮小知道與說出之間的差距。</p></div>
+        </section>
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-method">3. 核心方法與架構 (Methodology)</button></h2>
+          <div class="section-body" id="section-method"><ol><li>對 true／false QA pairs 訓練每個 attention head 的線性 probe，依驗證準確率排序。</li><li>只選 top-K heads，避免干預所有 heads；以 probe weight 或 truthfulness mean difference 作 direction。</li><li>在 autoregressive generation 中，以 activation standard deviation scaling 後的 truthful direction shift selected heads；`alpha` 控制強度。</li><li>可修改 attention output projection bias，將干預離線 baked into pretrained model。</li></ol></div>
+        </section>
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-experiments">4. 實驗與評估 (Experiments)</button></h2>
+          <div class="section-body" id="section-experiments"><p><strong>評估基準：</strong>TruthfulQA；LLaMA-7B、Alpaca 與 Vicuna；另以 Natural Questions、TriviaQA 與 MMLU 測試 out-of-distribution generalization。</p><p><strong>關鍵發現：</strong></p><ul><li>筆記中的 Alpaca TruthfulQA true*informative 從 32.5% 提升至 65.1%；Vicuna 從 51.5% 提升至 74.0%。</li><li>top-K 與 `alpha` 掃描呈現 truthfulness 與 helpfulness 的 trade-off；過強干預可能回覆「I have no comment」。</li><li>Head-wise selection 相較干預所有 heads 或 point-wise selection，可在限制 perturbation 下維持資訊性。</li><li>在未重新調參的分布外測試中，ITI 在 Natural Questions、TriviaQA 與 MMLU 上有所提升。</li></ul></div>
+        </section>
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-limitations">5. 侷限性與未來展望 (Limitations &amp; Future Work)</button></h2>
+          <div class="section-body" id="section-limitations"><p><strong>侷限性：</strong>TruthfulQA 不涵蓋 truth 的完整意義；ITI 有 truthfulness 與 helpfulness trade-off；未機制性理解所有內部變化，也未宣稱足以確保所有 truthful answers。</p><p><strong>未來展望：</strong>探索 unsupervised direction discovery、truth representation multidimensional geometry，以及真實聊天情境與更廣泛資料上的泛化。</p></div>
+        </section>
+        <section class="paper-section">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-related">6. 相關工作 (Related Work)</button></h2>
+          <div class="section-body" id="section-related"><p>ITI 屬於 activation editing 與 steering vectors 路線，比 weight editing 更 minimally invasive；與 Contrast-Consistent Search 共同利用 latent representations 找 truth direction。</p><p>相較 RLHF／RLAIF，ITI 不需 reinforcement-learning fine-tuning；它以少量 labeled QA pairs 定位 attention-head directions。</p></div>
+        </section>
+        <section class="paper-section takeaways sticky-note">
+          <h2><button class="section-toggle" type="button" aria-expanded="true" aria-controls="section-takeaways">7. 個人省思與啟發 (Personal Takeaways)</button></h2>
+          <div class="section-body" id="section-takeaways"><p><strong>研究省思：</strong>ITI 是「內部 probing 找方向、對特定 components 注入方向、再以 output behavior 驗證」的實作案例。</p><p><strong>研究切入點：</strong>可比較 ITI 的 sparse head selection、SAE learned features 與 refusal direction，釐清分解粒度、干預位置與行為目標。</p><p><strong>研究生手寫筆記區：</strong>（待補充：閱讀完 PDF 後，可在此寫下對自己論文的具體啟發）</p></div>
+        </section>
+      </div>
+    </article>
+  </main>
+  <footer class="paper-footer"><a href="../index.html">← PaperWiki 書架</a><span>Last updated <time datetime="2026-11-20">2026-11-20</time></span></footer>
+</body>
+</html>
