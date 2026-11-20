@@ -1,0 +1,29 @@
+{
+  "step": "verify_html",
+  "generated_at": "2026-11-20T12:56:41.083403+00:00",
+  "overall_status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "checks": [
+    {
+      "name": "slide_count",
+      "status": "PASS",
+      "detail": "HTML 與 JSON 均為 11 頁"
+    },
+    {
+      "name": "placeholder_check",
+      "status": "PASS",
+      "detail": "無殘留未完成標記"
+    },
+    {
+      "name": "source_markers",
+      "status": "PASS",
+      "detail": "所有 HTML 來源標記皆合法"
+    },
+    {
+      "name": "navigation",
+      "status": "PASS",
+      "detail": "前後頁與頁碼控制皆存在"
+    }
+  ]
+}

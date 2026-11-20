@@ -1,0 +1,24 @@
+{
+  "step": "verify_content",
+  "generated_at": "2026-11-20T12:56:04.629568+00:00",
+  "overall_status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "checks": [
+    {
+      "name": "slide_sources_and_title",
+      "status": "PASS",
+      "detail": "每頁標題與來源皆合法"
+    },
+    {
+      "name": "bullet_count",
+      "status": "PASS",
+      "detail": "每頁條列數皆在 4 點以內"
+    },
+    {
+      "name": "text_length_guardrail",
+      "status": "PASS",
+      "detail": "每頁字數皆在安全範圍內"
+    }
+  ]
+}

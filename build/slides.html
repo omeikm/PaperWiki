@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Representation Learning — 教學簡報</title>
+  <style>
+    :root {
+      --paper:#FAF8F5; --surface:#FFFFFF; --ink:#2D2A26; --muted:#6E6A63;
+      --line:#E6E2D8; --accent:#D97757; --sage:#4A6B5D;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; overflow:hidden; background:var(--paper); color:var(--ink); font-family:Inter,"Noto Sans TC",sans-serif; }
+    .deck { height:100vh; }
+    .slide { display:none; position:relative; width:min(1120px,calc(100vw - 64px)); height:calc(100vh - 64px); margin:32px auto; padding:68px 82px 44px; border:1px solid var(--line); border-radius:18px; background:var(--surface); box-shadow:0 18px 46px rgba(58,45,32,.08); }
+    .slide.is-active { display:block; }
+    .slide-accent { position:absolute; left:82px; top:38px; width:54px; height:4px; border-radius:999px; background:var(--accent); }
+    .kicker { margin:0 0 18px; color:var(--accent); font-size:12px; font-weight:700; letter-spacing:.12em; }
+    h1 { max-width:900px; margin:0 0 22px; font-family:Merriweather,"Noto Serif TC",serif; font-size:clamp(38px,5vw,64px); line-height:1.18; letter-spacing:-.04em; }
+    .analogy { max-width:900px; margin:0 0 28px; color:var(--muted); font-size:20px; line-height:1.55; }
+    ul { margin:0; padding-left:26px; }
+    li { margin:12px 0; font-size:clamp(18px,2vw,26px); line-height:1.45; }
+    li::marker { color:var(--accent); }
+    .limitation { position:absolute; left:82px; right:82px; bottom:88px; display:flex; gap:14px; align-items:flex-start; padding:16px 18px; border:1px solid #E9E1BB; border-radius:12px; background:#FFF9DB; color:#5E5637; font-size:15px; line-height:1.5; }
+    .limitation strong { flex:none; color:var(--sage); }
+    footer { position:absolute; left:82px; right:82px; bottom:35px; display:flex; justify-content:flex-end; }
+    .sources { max-width:760px; color:var(--muted); font-size:11px; line-height:1.45; text-align:right; }
+    .nav { position:fixed; left:50%; bottom:12px; z-index:5; display:flex; gap:8px; transform:translateX(-50%); }
+    .nav button { min-width:42px; height:32px; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.92); color:var(--ink); cursor:pointer; }
+    .nav button:hover { border-color:var(--accent); color:var(--accent); }
+    .counter { display:grid; min-width:64px; place-items:center; color:var(--muted); font-size:12px; }
+    @media (max-width:760px) {
+      .slide { width:calc(100vw - 24px); height:calc(100vh - 56px); margin:20px 12px 36px; padding:48px 28px 36px; }
+      .slide-accent { left:28px; top:26px; }
+      h1 { font-size:34px; }
+      .analogy { font-size:16px; }
+      li { font-size:17px; }
+      .limitation { left:28px; right:28px; bottom:82px; font-size:13px; }
+      footer { left:28px; right:28px; bottom:38px; }
+      .sources { font-size:9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="Representation Learning 教學簡報">
+
+<section class="slide" data-slide="1" aria-label="投影片 1">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 01/11</p>
+  <h1>從句向量到內部控制</h1>
+  <p class="analogy">把研究想成一條升級線：先做方便比較的地圖，再開始讀取地圖裡的城市與道路。</p>
+  <ul><li>從可重用句向量，進到對比校正</li><li>再把 LLM 轉成雙向編碼器</li><li>最後讀取、分解與控制內部方向</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>這是一條教學脈絡，不代表每一篇都直接解決前一篇留下的全部問題。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2019-reimers-sbert.md] · [2021-gao-simcse.md] · [2024-behnamghader-llm2vec.md] · [2023-zou-repe.md] · [2023-cunningham-sae.md] · [2023-li-iti.md] · [2024-arditi-refusal.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="2" aria-label="投影片 2">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 02/11</p>
+  <h1>為什麼需要句向量</h1>
+  <p class="analogy">一開始像逐組比對每張卡片，Sentence-BERT 則先給每張卡片固定座標。</p>
+  <ul><li>Cross-encoder 每組句對都需重新推論</li><li>共享編碼器分別產出句向量</li><li>Pooling 後可用 cosine similarity 快速比較</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>細粒度與未見主題仍可能讓單句向量不足。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2019-reimers-sbert.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="3" aria-label="投影片 3">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 03/11</p>
+  <h1>對比學習的直覺</h1>
+  <p class="analogy">把相同句子的微擾動拉近，把其他句子推遠。</p>
+  <ul><li>無監督：同一句子的兩次 Dropout 視角為正樣本</li><li>監督：NLI entailment 正樣本、contradiction 負樣本</li><li>目標是改善 Alignment 與 Uniformity</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>效果依賴基底模型與 batch size，不適合脫離條件泛化。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2021-gao-simcse.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="4" aria-label="投影片 4">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 04/11</p>
+  <h1>LLM2Vec：讓 Causal LLM 能看完整句子</h1>
+  <p class="analogy">把只能回頭看的閱讀規則改成能看前後文，但保留原本的語言能力。</p>
+  <ul><li>移除 Causal Mask 啟用雙向 attention</li><li>MNTP 讓模型適應雙向資訊</li><li>無監督對比學習微調文字表示</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>改造需要算力，極長文本仍受原上下文視窗限制。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2024-behnamghader-llm2vec.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="5" aria-label="投影片 5">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 05/11</p>
+  <h1>RepE：把內部 activation 當研究物件</h1>
+  <p class="analogy">不是只看模型最後吐出的答案，而是檢查中途各層留下的坐標。</p>
+  <ul><li>LAT 用刺激收集 neural activity</li><li>PCA 或線性方向可讀取高階概念</li><li>讀取與控制是兩件需分開驗證的事</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>線性假設、layer 與 stimulus 選擇會影響方向品質。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2023-zou-repe.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="6" aria-label="投影片 6">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 06/11</p>
+  <h1>SAE：把多義神經元拆成稀疏特徵</h1>
+  <p class="analogy">神經元像混合顏色的燈；SAE 嘗試找回構成顏色的稀疏調色盤。</p>
+  <ul><li>Polysemantic neuron 無法單獨代表一個概念</li><li>SAE 用 reconstruction 加 sparsity 學 feature dictionary</li><li>Patching 可檢查 feature 的局部因果效果</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>重建仍有資訊損失，且不同層與模型部件仍有限制。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2023-cunningham-sae.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="7" aria-label="投影片 7">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 07/11</p>
+  <h1>ITI：只干預少數 truthful attention heads</h1>
+  <p class="analogy">不是把整間房子重線，而是調整少數最會接收真實性訊號的開關。</p>
+  <ul><li>線性 probe 找 truthful heads 與方向</li><li>只 shift probe 準確率高的 top-K heads</li><li>每次 autoregressive 生成都重複輕量干預</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>真實性與 helpfulness 有取捨，強度需要依需求調整。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2023-li-iti.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="8" aria-label="投影片 8">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 08/11</p>
+  <h1>ActAdd：用 prompt-pair 差分 steering</h1>
+  <p class="analogy">不是改權重，只是把正反例的 activation 差作成方向，在生成時加入。</p>
+  <ul><li>正反 prompt 分別取得指定層 activation</li><li>計算差值取得 Love-Hate 類型 steering vector</li><li>乘上 injection coefficient 並加入 forward pass</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>需調參且一般 API 未必暴露中間 activation；部分 steering vector 會失敗。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2023-turner-actadd.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="9" aria-label="投影片 9">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 09/11</p>
+  <h1>Refusal：聚焦單一安全行為</h1>
+  <p class="analogy">拒絕不是多個亂序規則，而可能被一個方向所中介。</p>
+  <ul><li>比較 harmful 與 harmless activation</li><li>Ablation 可降低甚至停用拒絕</li><li>Addition 可誘發拒絕；orthogonalization 可改權重</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>方向抽取是啟發式，且主要證據來自特定開源模型。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2024-arditi-refusal.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="10" aria-label="投影片 10">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 10/11</p>
+  <h1>方法地圖：每篇解決不同問題</h1>
+  <p class="analogy">用同一張表示地圖，各方法選了不同的站牌、比例尺與干預工具。</p>
+  <ul><li>LLM2Vec 改變編碼架構以產生文字表示</li><li>SAE 偏 overcomplete feature 分解</li><li>ITI 與 ActAdd 分別選 heads 與 residual-stream 注入方向</li><li>Refusal direction 偏單一行為因果驗證</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>不能把任何一種方法直接描述成萬能或完整電路解讀。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2024-behnamghader-llm2vec.md] · [2023-zou-repe.md] · [2023-cunningham-sae.md] · [2023-li-iti.md] · [2023-turner-actadd.md] · [2024-arditi-refusal.md]</div>
+  </footer>
+</section>
+<section class="slide" data-slide="11" aria-label="投影片 11">
+  <div class="slide-accent"></div>
+  <p class="kicker">PAPERWIKI · 教學簡報 11/11</p>
+  <h1>最後提醒：效果要帶邊界</h1>
+  <p class="analogy">簡報的結論要像地圖的圖例，清楚標出比例尺與未走到的區域。</p>
+  <ul><li>注意算力、上下文與 reconstruction loss</li><li>注意線性假設與干預副作用</li><li>注意模型範圍、資料與泛化限制</li></ul>
+  <aside class="limitation">
+    <strong>邊界提醒</strong>
+    <span>內部方法證明的是特定干預結果，不代表所有安全問題已解決。</span>
+  </aside>
+  <footer>
+    <div class="sources">[2019-reimers-sbert.md] · [2024-behnamghader-llm2vec.md] · [2023-zou-repe.md] · [2023-cunningham-sae.md] · [2023-li-iti.md] · [2023-turner-actadd.md] · [2024-arditi-refusal.md]</div>
+  </footer>
+</section>
+  </main>
+  <nav class="nav" aria-label="投影片導覽">
+    <button type="button" data-prev aria-label="上一頁">←</button>
+    <span class="counter" data-counter>1 / 11</span>
+    <button type="button" data-next aria-label="下一頁">→</button>
+  </nav>
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const counter = document.querySelector("[data-counter]");
+    let current = 0;
+
+    function show(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle("is-active", i === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      history.replaceState(null, "", `#${current + 1}`);
+    }
+
+    document.querySelector("[data-prev]").addEventListener("click", () => show(current - 1));
+    document.querySelector("[data-next]").addEventListener("click", () => show(current + 1));
+    document.addEventListener("keydown", event => {
+      if (event.key === "ArrowLeft" || event.key === "PageUp") show(current - 1);
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") show(current + 1);
+      if (event.key === "Home") show(0);
+      if (event.key === "End") show(slides.length - 1);
+    });
+
+    const hashIndex = Number(location.hash.replace("#", ""));
+    show(Number.isInteger(hashIndex) && hashIndex >= 1 && hashIndex <= slides.length ? hashIndex - 1 : 0);
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-20T11:30:15.627777+00:00",
-  "total_notes": 7,
+  "generated_at": "2026-11-20T12:55:40.863754+00:00",
+  "total_notes": 8,
   "notes": [
     {
       "id": "2019-reimers-sbert",
@@ -40,7 +40,17 @@
       "year": "2023",
       "venue_and_year": "NeurIPS 2023",
       "tags": "#Representation Learning, #AI Safety, #Truthfulness, #Activation Editing",
-      "synthesis_citation_count": 6
+      "synthesis_citation_count": 7
+    },
+    {
+      "id": "2023-turner-actadd",
+      "filename": "2023-turner-actadd.md",
+      "path": "notes/2023-turner-actadd.md",
+      "title": "Steering Language Models With Activation Engineering",
+      "year": "2023",
+      "venue_and_year": "arXiv 2023",
+      "tags": "#Activation Engineering, #Representation Engineering, #Activation Addition, #AI Safety",
+      "synthesis_citation_count": 5
     },
     {
       "id": "2023-zou-repe",

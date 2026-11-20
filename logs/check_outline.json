@@ -1,0 +1,34 @@
+{
+  "step": "check_outline",
+  "generated_at": "2026-11-20T12:56:05.584065+00:00",
+  "overall_status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "checks": [
+    {
+      "name": "slide_count_range",
+      "status": "PASS",
+      "detail": "共 11 頁（允許區間 6~12）"
+    },
+    {
+      "name": "slide_schema",
+      "status": "PASS",
+      "detail": "所有投影片必要欄位齊全"
+    },
+    {
+      "name": "source_validity",
+      "status": "PASS",
+      "detail": "所有 source_files 皆存在於 notes/"
+    },
+    {
+      "name": "source_coverage",
+      "status": "PASS",
+      "detail": "已涵蓋全部 8 篇 notes"
+    },
+    {
+      "name": "pacing_check",
+      "status": "PASS",
+      "detail": "投影片來源節奏正常"
+    }
+  ]
+}

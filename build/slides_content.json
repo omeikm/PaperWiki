@@ -1,0 +1,137 @@
+{
+  "slides": [
+    {
+      "slide_id": 1,
+      "title": "從句向量到內部控制",
+      "analogy": "把研究想成一條升級線：先做方便比較的地圖，再開始讀取地圖裡的城市與道路。",
+      "bullets": [
+        "從可重用句向量，進到對比校正",
+        "再把 LLM 轉成雙向編碼器",
+        "最後讀取、分解與控制內部方向"
+      ],
+      "limitation_note": "這是一條教學脈絡，不代表每一篇都直接解決前一篇留下的全部問題。",
+      "source_files": ["2019-reimers-sbert.md", "2021-gao-simcse.md", "2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2024-arditi-refusal.md"]
+    },
+    {
+      "slide_id": 2,
+      "title": "為什麼需要句向量",
+      "analogy": "一開始像逐組比對每張卡片，Sentence-BERT 則先給每張卡片固定座標。",
+      "bullets": [
+        "Cross-encoder 每組句對都需重新推論",
+        "共享編碼器分別產出句向量",
+        "Pooling 後可用 cosine similarity 快速比較"
+      ],
+      "limitation_note": "細粒度與未見主題仍可能讓單句向量不足。",
+      "source_files": ["2019-reimers-sbert.md"]
+    },
+    {
+      "slide_id": 3,
+      "title": "對比學習的直覺",
+      "analogy": "把相同句子的微擾動拉近，把其他句子推遠。",
+      "bullets": [
+        "無監督：同一句子的兩次 Dropout 視角為正樣本",
+        "監督：NLI entailment 正樣本、contradiction 負樣本",
+        "目標是改善 Alignment 與 Uniformity"
+      ],
+      "limitation_note": "效果依賴基底模型與 batch size，不適合脫離條件泛化。",
+      "source_files": ["2021-gao-simcse.md"]
+    },
+    {
+      "slide_id": 4,
+      "title": "LLM2Vec：讓 Causal LLM 能看完整句子",
+      "analogy": "把只能回頭看的閱讀規則改成能看前後文，但保留原本的語言能力。",
+      "bullets": [
+        "移除 Causal Mask 啟用雙向 attention",
+        "MNTP 讓模型適應雙向資訊",
+        "無監督對比學習微調文字表示"
+      ],
+      "limitation_note": "改造需要算力，極長文本仍受原上下文視窗限制。",
+      "source_files": ["2024-behnamghader-llm2vec.md"]
+    },
+    {
+      "slide_id": 5,
+      "title": "RepE：把內部 activation 當研究物件",
+      "analogy": "不是只看模型最後吐出的答案，而是檢查中途各層留下的坐標。",
+      "bullets": [
+        "LAT 用刺激收集 neural activity",
+        "PCA 或線性方向可讀取高階概念",
+        "讀取與控制是兩件需分開驗證的事"
+      ],
+      "limitation_note": "線性假設、layer 與 stimulus 選擇會影響方向品質。",
+      "source_files": ["2023-zou-repe.md"]
+    },
+    {
+      "slide_id": 6,
+      "title": "SAE：把多義神經元拆成稀疏特徵",
+      "analogy": "神經元像混合顏色的燈；SAE 嘗試找回構成顏色的稀疏調色盤。",
+      "bullets": [
+        "Polysemantic neuron 無法單獨代表一個概念",
+        "SAE 用 reconstruction 加 sparsity 學 feature dictionary",
+        "Patching 可檢查 feature 的局部因果效果"
+      ],
+      "limitation_note": "重建仍有資訊損失，且不同層與模型部件仍有限制。",
+      "source_files": ["2023-cunningham-sae.md"]
+    },
+    {
+      "slide_id": 7,
+      "title": "ITI：只干預少數 truthful attention heads",
+      "analogy": "不是把整間房子重線，而是調整少數最會接收真實性訊號的開關。",
+      "bullets": [
+        "線性 probe 找 truthful heads 與方向",
+        "只 shift probe 準確率高的 top-K heads",
+        "每次 autoregressive 生成都重複輕量干預"
+      ],
+      "limitation_note": "真實性與 helpfulness 有取捨，強度需要依需求調整。",
+      "source_files": ["2023-li-iti.md"]
+    },
+    {
+      "slide_id": 8,
+      "title": "ActAdd：用 prompt-pair 差分 steering",
+      "analogy": "不是改權重，只是把正反例的 activation 差作成方向，在生成時加入。",
+      "bullets": [
+        "正反 prompt 分別取得指定層 activation",
+        "計算差值取得 Love-Hate 類型 steering vector",
+        "乘上 injection coefficient 並加入 forward pass"
+      ],
+      "limitation_note": "需調參且一般 API 未必暴露中間 activation；部分 steering vector 會失敗。",
+      "source_files": ["2023-turner-actadd.md"]
+    },
+    {
+      "slide_id": 9,
+      "title": "Refusal：聚焦單一安全行為",
+      "analogy": "拒絕不是多個亂序規則，而可能被一個方向所中介。",
+      "bullets": [
+        "比較 harmful 與 harmless activation",
+        "Ablation 可降低甚至停用拒絕",
+        "Addition 可誘發拒絕；orthogonalization 可改權重"
+      ],
+      "limitation_note": "方向抽取是啟發式，且主要證據來自特定開源模型。",
+      "source_files": ["2024-arditi-refusal.md"]
+    },
+    {
+      "slide_id": 10,
+      "title": "方法地圖：每篇解決不同問題",
+      "analogy": "用同一張表示地圖，各方法選了不同的站牌、比例尺與干預工具。",
+      "bullets": [
+        "LLM2Vec 改變編碼架構以產生文字表示",
+        "SAE 偏 overcomplete feature 分解",
+        "ITI 與 ActAdd 分別選 heads 與 residual-stream 注入方向",
+        "Refusal direction 偏單一行為因果驗證"
+      ],
+      "limitation_note": "不能把任何一種方法直接描述成萬能或完整電路解讀。",
+      "source_files": ["2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2023-turner-actadd.md", "2024-arditi-refusal.md"]
+    },
+    {
+      "slide_id": 11,
+      "title": "最後提醒：效果要帶邊界",
+      "analogy": "簡報的結論要像地圖的圖例，清楚標出比例尺與未走到的區域。",
+      "bullets": [
+        "注意算力、上下文與 reconstruction loss",
+        "注意線性假設與干預副作用",
+        "注意模型範圍、資料與泛化限制"
+      ],
+      "limitation_note": "內部方法證明的是特定干預結果，不代表所有安全問題已解決。",
+      "source_files": ["2019-reimers-sbert.md", "2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2023-turner-actadd.md", "2024-arditi-refusal.md"]
+    }
+  ]
+}

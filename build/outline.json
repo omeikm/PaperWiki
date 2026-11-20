@@ -1,0 +1,149 @@
+{
+  "slides": [
+    {
+      "slide_id": 1,
+      "title": "表示學習到內部控制：一條問題演進線",
+      "goal": "讓新手先掌握七篇論文的共同主線，理解為什麼研究會從句向量走向模型內部表徵。",
+      "key_points": [
+        "先把句子做成可重用表示",
+        "再讓表示空間更適合語義比較",
+        "最後讀取與控制模型內部方向"
+      ],
+      "source_files": [
+        "2019-reimers-sbert.md",
+        "2021-gao-simcse.md",
+        "2024-behnamghader-llm2vec.md",
+        "2023-zou-repe.md",
+        "2023-cunningham-sae.md",
+        "2023-li-iti.md",
+        "2023-turner-actadd.md",
+        "2024-arditi-refusal.md"
+      ]
+    },
+    {
+      "slide_id": 2,
+      "title": "第一站：為什麼需要句向量",
+      "goal": "理解 cross-encoder 的效率瓶頸，以及獨立句向量如何解決大規模比較。",
+      "key_points": [
+        "Cross-encoder 每組句對都要重新推論",
+        "Siamese / Triplet 網路共享編碼器",
+        "Pooling 後可用 cosine similarity 比較"
+      ],
+      "source_files": ["2019-reimers-sbert.md"]
+    },
+    {
+      "slide_id": 3,
+      "title": "第二站：對比學習簡化表示空間",
+      "goal": "理解 SimCSE 如何用正負樣本校正句向量的 Alignment 與 Uniformity。",
+      "key_points": [
+        "同一句子的兩次 Dropout 視角為正樣本",
+        "其他句子可作負樣本",
+        "監督設定可加入 NLI entailment 與 contradiction"
+      ],
+      "source_files": ["2021-gao-simcse.md"]
+    },
+    {
+      "slide_id": 4,
+      "title": "第三站：讓大型 Causal LLM 成為雙向編碼器",
+      "goal": "理解 Causal Mask 與雙向表示的取捨，以及 LLM2Vec 如何銜接兩條架構路線。",
+      "key_points": [
+        "移除 Causal Mask 啟用雙向 attention",
+        "MNTP 讓模型適應雙向資訊",
+        "無監督對比學習微調向量空間"
+      ],
+      "source_files": ["2024-behnamghader-llm2vec.md"]
+    },
+    {
+      "slide_id": 5,
+      "title": "第四站：從輸出向量轉向內部表徵",
+      "goal": "理解 RepE 為何把 activation、層與 token 當成分析單位。",
+      "key_points": [
+        "LAT 設計刺激並收集 neural activity",
+        "PCA 或線性模型建構概念方向",
+        "閱讀方法不必然等於控制能力"
+      ],
+      "source_files": ["2023-zou-repe.md"]
+    },
+    {
+      "slide_id": 6,
+      "title": "第五站：用 SAE 拆解 superposition",
+      "goal": "理解為何單一神經元可能多義，以及 SAE 如何學習稀疏 feature dictionary。",
+      "key_points": [
+        "Polysemantic neuron 是 one neuron 多語義",
+        "SAE 用稀疏重建分解 overcomplete features",
+        "Activation patching 可驗證局部因果作用"
+      ],
+      "source_files": ["2023-cunningham-sae.md"]
+    },
+    {
+      "slide_id": 7,
+      "title": "第六站：用 ITI 在指定 attention heads 控制真實性",
+      "goal": "理解線性 probe 如何找到 truthful heads，以及 inference-time shift 的條件。",
+      "key_points": [
+        "Probe 區分真實與錯誤相關 activation",
+        "只干預 probe 準確率高的 top-K heads",
+        "每次 next-token generation 重複輕量干預"
+      ],
+      "source_files": ["2023-li-iti.md"]
+    },
+    {
+      "slide_id": 8,
+      "title": "第七站：用 prompt-pair 差分直接 steering",
+      "goal": "理解 ActAdd 如何用正反 prompt 的 activation 差值控制輸出，而不需最佳化或微調。",
+      "key_points": [
+        "正反 prompt 分別取得指定層 activation",
+        "差值形成 Love-Hate 類型的 steering vector",
+        "在 forward pass 依 injection coefficient 注入"
+      ],
+      "source_files": ["2023-turner-actadd.md"]
+    },
+    {
+      "slide_id": 9,
+      "title": "第八站：拒絕方向是更聚焦的安全案例",
+      "goal": "理解單一 refusal direction 如何被找到、移除、加入或合併進權重。",
+      "key_points": [
+        "Harmful 與 harmless activation 產生方向",
+        "Ablation 可停用拒絕",
+        "Addition 可誘發拒絕；weight orthogonalization 可改權重"
+      ],
+      "source_files": ["2024-arditi-refusal.md"]
+    },
+    {
+      "slide_id": 10,
+      "title": "多種方法的差異：粒度、目標與干預",
+      "goal": "比較 LLM2Vec、RepE、SAE、ITI 與 refusal direction 的不同角色。",
+      "key_points": [
+        "輸出端向量與內部表徵是不同層次",
+        "SAE 偏 feature 分解，ITI 偏 sparse head 控制",
+        "Refusal direction 偏單一行為的因果驗證"
+      ],
+      "source_files": [
+        "2024-behnamghader-llm2vec.md",
+        "2023-zou-repe.md",
+        "2023-cunningham-sae.md",
+        "2023-li-iti.md",
+        "2023-turner-actadd.md",
+        "2024-arditi-refusal.md"
+      ]
+    },
+    {
+      "slide_id": 11,
+      "title": "限制與防過度宣稱",
+      "goal": "帶出跨篇限制，讓後續簡報描述效果時保留必要邊界。",
+      "key_points": [
+        "算力、上下文與重建資訊仍有限制",
+        "線性方向與 SAE 分解不必然可完整泛化",
+        "干預可能犧牲資訊性或只適用特定模型"
+      ],
+      "source_files": [
+        "2019-reimers-sbert.md",
+        "2024-behnamghader-llm2vec.md",
+        "2023-zou-repe.md",
+        "2023-cunningham-sae.md",
+        "2023-li-iti.md",
+        "2023-turner-actadd.md",
+        "2024-arditi-refusal.md"
+      ]
+    }
+  ]
+}
