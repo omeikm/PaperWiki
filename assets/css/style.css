@@ -92,6 +92,40 @@ button {
   letter-spacing: 0.06em;
 }
 
+.site-nav {
+  display: flex;
+  gap: 8px;
+  width: min(1120px, calc(100% - 64px));
+  margin: 18px auto 0;
+}
+
+.site-nav-link {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.site-nav-link:hover {
+  border-color: #D8B3A5;
+  color: var(--accent-dark);
+}
+
+.site-nav-link.is-active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
 .home-hero {
   width: min(1120px, calc(100% - 64px));
   margin: 0 auto;
@@ -713,6 +747,7 @@ button {
 @media (max-width: 680px) {
   .site-header,
   .site-footer,
+  .site-nav,
   .home-hero,
   .library-section {
     width: min(100% - 36px, 560px);

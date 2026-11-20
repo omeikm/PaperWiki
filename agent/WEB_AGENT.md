@@ -71,7 +71,6 @@
 2. **頂部閱讀進度條 (`assets/js/progress.js` -> 僅 `papers/*.html` 引入)：**
 * 單篇論文頁面視窗最上方需固定一條 `4px` 高的陶土橘 (`#D97757`) 進度條，隨捲動軸即時顯示閱讀百分比。
 
-
 3. **研究生「閱讀狀態 / 心情印章」切換器 (`assets/js/mood-badge.js` -> 僅 `papers/*.html` 引入)：**
 * 在每篇論文頂部的 MetaData 資訊卡右上角，提供一個可點擊切換狀態的互動按鈕，並將狀態儲存於瀏覽器 `localStorage`（以該篇論文檔名為 key）：
 * `🌱 初讀萌芽`（預設狀態）
@@ -82,6 +81,12 @@
 
 4. **章節折疊與專注模式 (`assets/js/accordion.js` -> 僅 `papers/*.html` 引入)：**
 * 論文內文的各個主要章節（H2）需支援點擊標題展開或收合內容，方便讀者快速對照特定段落。
+
+### 4.5 首頁頂部 Navigation / Tab（整合 LLM Wiki 與教學簡報）
+- 在 `index.html` 最上方提供輕量頂部切換列（`.site-nav`），讓使用者可在同一個站點切換：
+  - **LLM Wiki**（保留原本 PaperWiki 首頁與論文卡片列表）
+  - **教學簡報**（連結至教學型 HTML 簡報，`build/slides.html`，並確保相對路徑在 GitHub Pages 可正常開啟）
+- 視覺沿用 Warm Academic 色系（`#FAF8F5`、`#FFFFFF`、`#2D2A26`、`#6E6A63`、`#E6E2D8`、`#D97757`、`#4A6B5D`），不破壞既有 `.paper-grid`、`.paper-card` 與 `assets/js/filter.js` 的篩選行為。
 
 ---
 

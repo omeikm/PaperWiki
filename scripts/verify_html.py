@@ -53,7 +53,7 @@ def verify_html(
             checks.append({"name": "source_markers", "status": "PASS", "detail": "所有 HTML 來源標記皆合法"})
 
         nav_missing = [
-            marker for marker in ('data-prev', 'data-next', 'data-counter')
+            marker for marker in ('back-wiki', 'data-prev', 'data-next', 'data-counter')
             if marker not in text
         ]
         if nav_missing:

@@ -81,6 +81,8 @@ def main() -> None:
     .nav button {{ min-width:42px; height:32px; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.92); color:var(--ink); cursor:pointer; }}
     .nav button:hover {{ border-color:var(--accent); color:var(--accent); }}
     .counter {{ display:grid; min-width:64px; place-items:center; color:var(--muted); font-size:12px; }}
+    .back-wiki {{ position:fixed; right:24px; top:18px; z-index:6; display:inline-flex; min-height:36px; align-items:center; padding:7px 14px; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.92); color:var(--sage); font-size:12px; font-weight:700; text-decoration:none; box-shadow:0 6px 18px rgba(58,45,32,.06); }}
+    .back-wiki:hover {{ border-color:var(--sage); }}
     @media (max-width:760px) {{
       .slide {{ width:calc(100vw - 24px); height:calc(100vh - 56px); margin:20px 12px 36px; padding:48px 28px 36px; }}
       .slide-accent {{ left:28px; top:26px; }}
@@ -90,10 +92,12 @@ def main() -> None:
       .limitation {{ left:28px; right:28px; bottom:82px; font-size:13px; }}
       footer {{ left:28px; right:28px; bottom:38px; }}
       .sources {{ font-size:9px; }}
+      .back-wiki {{ right:12px; top:8px; min-height:32px; padding:5px 10px; font-size:11px; }}
     }}
   </style>
 </head>
 <body>
+  <a class="back-wiki" href="../index.html">← LLM Wiki</a>
   <main class="deck" aria-label="Representation Learning 教學簡報">
 {''.join(slide_html)}
   </main>
