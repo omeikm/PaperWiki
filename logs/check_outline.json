@@ -1,6 +1,6 @@
 {
   "step": "check_outline",
-  "generated_at": "2026-11-20T12:56:05.584065+00:00",
+  "generated_at": "2026-11-20T13:55:40.899232+00:00",
   "overall_status": "PASS",
   "errors": [],
   "warnings": [],
@@ -8,7 +8,7 @@
     {
       "name": "slide_count_range",
       "status": "PASS",
-      "detail": "共 11 頁（允許區間 6~12）"
+      "detail": "共 12 頁（允許區間 6~12）"
     },
     {
       "name": "slide_schema",
@@ -23,7 +23,7 @@
     {
       "name": "source_coverage",
       "status": "PASS",
-      "detail": "已涵蓋全部 8 篇 notes"
+      "detail": "已涵蓋全部 9 篇 notes"
     },
     {
       "name": "pacing_check",

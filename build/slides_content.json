@@ -10,7 +10,7 @@
         "最後讀取、分解與控制內部方向"
       ],
       "limitation_note": "這是一條教學脈絡，不代表每一篇都直接解決前一篇留下的全部問題。",
-      "source_files": ["2019-reimers-sbert.md", "2021-gao-simcse.md", "2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2024-arditi-refusal.md"]
+      "source_files": ["2019-reimers-sbert.md", "2021-gao-simcse.md", "2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2023-turner-actadd.md", "2024-heimersheim-actpatch.md", "2024-arditi-refusal.md"]
     },
     {
       "slide_id": 2,
@@ -98,6 +98,18 @@
     },
     {
       "slide_id": 9,
+      "title": "Activation Patching：驗證 circuit 的因果證據",
+      "analogy": "交換 clean/corrupt activation，觀察修復或破壞行為。",
+      "bullets": [
+        "Clean/corrupt prompt pair 替換指定 activation",
+        "Denoising 測 sufficient restoration",
+        "Noising 測 necessary maintenance"
+      ],
+      "limitation_note": "只適用所選 prompt distribution，不代表最小 circuit。",
+      "source_files": ["2024-heimersheim-actpatch.md"]
+    },
+    {
+      "slide_id": 10,
       "title": "Refusal：聚焦單一安全行為",
       "analogy": "拒絕不是多個亂序規則，而可能被一個方向所中介。",
       "bullets": [
@@ -109,20 +121,20 @@
       "source_files": ["2024-arditi-refusal.md"]
     },
     {
-      "slide_id": 10,
+      "slide_id": 11,
       "title": "方法地圖：每篇解決不同問題",
       "analogy": "用同一張表示地圖，各方法選了不同的站牌、比例尺與干預工具。",
       "bullets": [
         "LLM2Vec 改變編碼架構以產生文字表示",
         "SAE 偏 overcomplete feature 分解",
         "ITI 與 ActAdd 分別選 heads 與 residual-stream 注入方向",
-        "Refusal direction 偏單一行為因果驗證"
+        "Patching 驗證必要充分性；refusal direction 聚焦單一行為"
       ],
       "limitation_note": "不能把任何一種方法直接描述成萬能或完整電路解讀。",
-      "source_files": ["2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2023-turner-actadd.md", "2024-arditi-refusal.md"]
+      "source_files": ["2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2023-turner-actadd.md", "2024-heimersheim-actpatch.md", "2024-arditi-refusal.md"]
     },
     {
-      "slide_id": 11,
+      "slide_id": 12,
       "title": "最後提醒：效果要帶邊界",
       "analogy": "簡報的結論要像地圖的圖例，清楚標出比例尺與未走到的區域。",
       "bullets": [
@@ -131,7 +143,7 @@
         "注意模型範圍、資料與泛化限制"
       ],
       "limitation_note": "內部方法證明的是特定干預結果，不代表所有安全問題已解決。",
-      "source_files": ["2019-reimers-sbert.md", "2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2023-turner-actadd.md", "2024-arditi-refusal.md"]
+      "source_files": ["2019-reimers-sbert.md", "2024-behnamghader-llm2vec.md", "2023-zou-repe.md", "2023-cunningham-sae.md", "2023-li-iti.md", "2023-turner-actadd.md", "2024-heimersheim-actpatch.md", "2024-arditi-refusal.md"]
     }
   ]
 }

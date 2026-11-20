@@ -37,7 +37,12 @@
 - **ActAdd 展示最直接的 activation addition**：Turner 等人比較正反 prompt pair 在指定 residual stream layer 的 activation 差，將差值作為 steering vector，再以 injection coefficient 乘上後加入 forward pass。這類方法不需 gradient descent 或 backward passes。[2023-turner-actadd.md]
 - **承接轉折**：ActAdd 比 ITI 更直接地計算一個高階屬性的 contrast direction；兩者都屬 inference-time activation control，但 ITI 依 probes 選定少數 heads，ActAdd 則直接對 residual stream 注入 prompt-pair difference。[2023-li-iti.md][2023-turner-actadd.md]
 
-### 第八段：聚焦拒絕行為，驗證單一方向的因果控制
+### 第八段：用 activation patching 驗證哪些內部成分負責行為
+
+- **Patching 把方向研究轉成 circuit 證據**：Heimersheim 與 Nanda 說明如何在 clean／corrupt prompt pair 中替換 activation，以區分 Denoising（是否 sufficient to restore）與 Noising（是否 necessary to maintain）。[2024-heimersheim-actpatch.md]
+- **承接轉折**：Patching 可從 residual stream 下探到 MLP、attention head、neuron 或 SAE feature，再用 path patching 檢查成分間交互；這讓此前的 steering 與 feature discovery 都需回到因果必要／充分性與 prompt distribution 的驗證。[2023-cunningham-sae.md][2023-li-iti.md][2023-turner-actadd.md][2024-heimersheim-actpatch.md]
+
+### 第九段：聚焦拒絕行為，驗證單一方向的因果控制
 
 - **Refusal Direction 作為安全行為的收束案例**：Arditi 等人以 HARMFUL／HARMLESS contrast pairs 抽取單一差值方向，再用 activation addition 與 directional ablation 驗證該方向對拒絕行為的因果中介；weight orthogonalization 則進一步將干預合併進模型權重。[2024-arditi-refusal.md]
 - **最終學習主軸**：前四篇建立「句向量可重用、對比學習可校正空間、大型 Causal 模型可改成雙向編碼、內部表示可被讀取」的基礎；中段以 SAE 與 ITI 展示不同粒度的 feature 與 head 定位；最後收束成可驗證的案例：安全相關行為是否由特定內部方向中介，以及如何以方向干預驗證與操控它。[2019-reimers-sbert.md][2021-gao-simcse.md][2024-behnamghader-llm2vec.md][2023-zou-repe.md][2023-cunningham-sae.md][2023-li-iti.md][2024-arditi-refusal.md]
@@ -53,6 +58,7 @@
 | Sparse Autoencoders | 解決 superposition 與 polysemanticity，建立可解讀的內部 feature dictionary | 從 activation 訓練 SAE；重建 loss 搭配 sparsity loss；以 autointerpretability、case study 與 activation patching 驗證 | 比單一 linear direction 更往 overcomplete feature decomposition 前進，並可為 circuit 與行為定位提供更多單元。[2023-cunningham-sae.md] |
 | Inference-Time Intervention | 在推論時引出模型的 truthfulness，縮小知道與說出的差距 | 對 attention heads 訓練線性 probe；選 top-K heads；依 truthful direction 與強度 shift activation | 比 SAE 的 feature dictionary 更聚焦特定 head 與行為；比 weight editing 更 minimally invasive，且干預可逐 token 重複。[2023-li-iti.md] |
 | Activation Addition | 用 contrast prompt pair 計算高階屬性的 steering vector 並直接注入 | 比較正反 prompt 在指定層的 activation 差；乘上 injection coefficient；於 forward pass 加入 residual stream | 不需 gradient 或 backward pass，干預粒度直接落在 residual stream；與 ITI 都是 inference-time control，但方向來源與選定位置不同。[2023-turner-actadd.md] |
+| Activation Patching | 用 controlled causal replacement 驗證哪些內部成分負責特定行為 | 在 clean/corrupt prompt pair 間 patch activation；比較 denoising、noising、粒度與 metric | 專注 circuit evidence 與 limitation，而非直接控制；可驗證 SAE feature、attention head 或 steering 方法的因果必要／充分性。[2024-heimersheim-actpatch.md] |
 | Refusal Direction | 找出拒絕行為的內部中介方向並驗證因果效果 | Difference-in-means 抽取 direction；directional ablation；activation addition；weight orthogonalization | 比 RepE 更聚焦於單一安全行為；又可直接將干預合併進權重，而不只在推論時加入控制向量。[2024-arditi-refusal.md][2023-zou-repe.md] |
 
 # 新手教學講解順序
@@ -64,7 +70,8 @@
 5. **理解超完備特徵分解**：先以 polysemantic neuron 與 superposition 介紹單神經元基礎的侷限，再講 SAE 如何以 reconstruction loss 加 sparsity loss 學習 overcomplete feature dictionary；最後用 IOI activation patching 與跨層消融連到 circuit。[2023-cunningham-sae.md]
 6. **理解按 attention head 的行為控制**：以 ITI 為案例，先講 linear probe 如何區分 truthful／false activation，再講 top-K head selection、direction shift 與 alpha／K 參數取捨。[2023-li-iti.md]
 7. **理解 prompt-pair contrast steering**：以 ActAdd 為案例，講解正反 prompt pair 如何形成 steering vector、在指定 residual stream layer 注入，以及 `c`、`l` 與 sequence alignment 的選擇。[2023-turner-actadd.md]
-8. **以單一安全行為收束主線**：以 refusal direction 為案例，依序講解 contrast activation → difference-in-means → unit direction → activation addition / directional ablation → weight orthogonalization。最後區分「方向存在」與「方向可精確語義解釋」兩件事。[2024-arditi-refusal.md][2023-zou-repe.md]
+8. **理解 patching 的因果解讀**：先區分 denoising 與 noising，再比較 residual stream、MLP、head、neuron 與 SAE feature；最後用 logit difference、logprob 等連續 metric 確認必要／充分性。[2024-heimersheim-actpatch.md]
+9. **以單一安全行為收束主線**：以 refusal direction 為案例，依序講解 contrast activation → difference-in-means → unit direction → activation addition / directional ablation → weight orthogonalization。最後區分「方向存在」與「方向可精確語義解釋」兩件事。[2024-arditi-refusal.md][2023-zou-repe.md]
 
 # 侷限性與防過度宣稱提醒
 
@@ -76,5 +83,6 @@
 - **IOI 與 feature 定位的泛化仍待確認**：Sparse dictionary 是 task-agnostic 訓練，但論文在 IOI 行為上的精細定位證據需更多工作確認是否能泛化到相似或不同任務；不能據此宣稱已取得完整網路電路。[2023-cunningham-sae.md]
 - **ITI 的真實性結果與 truth 的完整定義仍有界**：TruthfulQA 不涵蓋 truth 的完整意義；top-K 與 intervention strength 會造成 truthfulness 與 helpfulness 的取捨，過強干預可能犧牲資訊性。分布外與真實聊天情境的泛化仍需後續驗證；論文未宣稱 ITI 足以確保所有 truthful answers。[2023-li-iti.md]
 - **ActAdd 的參數、可及性與穩健性仍有限**：使用者需調整 injection coefficient、intervention layer 與 sequence alignment；部分 contrast pairs 失敗；一般 API 不一定暴露中間 activation；sentiment steering 也可能影響 fluency；不能據此宣稱可教模型全新能力或自然解讀所有方向。[2023-turner-actadd.md]
+- **Activation patching 的結論高度依賴實驗設計與 metric**：Patching 結果只適用於所選 clean/corrupt prompt distribution；positive result 不代表找到最小 circuit；Denoising 測 sufficient，Noising 測 necessary，兩者不互為鏡像。Discrete metrics、probability 與不同 prompt 可產生 saturation、threshold 或 false-positive effects。[2024-heimersheim-actpatch.md]
 - **拒絕方向方法只得到有限且模型相依的證據**：方向抽取仍是啟發式方法，不保證是最佳抽取；主要證據來自特定開源 Chat 模型集合，未必外推到更大規模或未測試的專有模型；方向語義也可能是 harm／danger 等概念而非單純「拒絕」。Coherence 指標、以及 adversarial suffix 機制分析的範圍仍有限。[2024-arditi-refusal.md]
 - **內部方法證明的是特定干預結果，不是所有安全問題都已解決**：應把這些方法表述為一種讀取、監控或控制工具，而非證明對齊永久可靠、模型已無 jailbreak 風險，或所有能力都能不受影響地保持。[2023-zou-repe.md][2024-arditi-refusal.md]

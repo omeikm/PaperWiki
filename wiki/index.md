@@ -2,7 +2,7 @@
 
 > 由 `scripts/harness_step1_wiki.py` 自動根據 `notes/` 產出與同步。
 
-- 收錄筆記數：8
+- 收錄筆記數：9
 
 | filename | year | title | note_path |
 | :--- | :--- | :--- | :--- |
@@ -14,3 +14,4 @@
 | `2023-zou-repe.md` | 2023 | Representation Engineering: A Top-Down Approach to AI Transparency | `notes/2023-zou-repe.md` |
 | `2024-arditi-refusal.md` | 2024 | Refusal in Language Models Is Mediated by a Single Direction | `notes/2024-arditi-refusal.md` |
 | `2024-behnamghader-llm2vec.md` | 2024 | LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders | `notes/2024-behnamghader-llm2vec.md` |
+| `2024-heimersheim-actpatch.md` | 2024 | How to use and interpret activation patching | `notes/2024-heimersheim-actpatch.md` |

@@ -17,6 +17,7 @@
         "2023-cunningham-sae.md",
         "2023-li-iti.md",
         "2023-turner-actadd.md",
+        "2024-heimersheim-actpatch.md",
         "2024-arditi-refusal.md"
       ]
     },
@@ -99,7 +100,18 @@
     },
     {
       "slide_id": 9,
-      "title": "第八站：拒絕方向是更聚焦的安全案例",
+      "title": "第八站：Activation Patching 如何驗證 circuit",
+      "goal": "理解 denoising/noising、patch granularity、prompt choice 與 metric 如何共同決定因果解讀。",
+      "key_points": [
+        "Clean/corrupt pair 替換指定 activation",
+        "Denoising 測 sufficiency，Noising 測 necessity",
+        "Logit difference 等連續 metric 更適合 exploratory patching"
+      ],
+      "source_files": ["2024-heimersheim-actpatch.md"]
+    },
+    {
+      "slide_id": 10,
+      "title": "第九站：拒絕方向是更聚焦的安全案例",
       "goal": "理解單一 refusal direction 如何被找到、移除、加入或合併進權重。",
       "key_points": [
         "Harmful 與 harmless activation 產生方向",
@@ -109,7 +121,7 @@
       "source_files": ["2024-arditi-refusal.md"]
     },
     {
-      "slide_id": 10,
+      "slide_id": 11,
       "title": "多種方法的差異：粒度、目標與干預",
       "goal": "比較 LLM2Vec、RepE、SAE、ITI 與 refusal direction 的不同角色。",
       "key_points": [
@@ -123,11 +135,12 @@
         "2023-cunningham-sae.md",
         "2023-li-iti.md",
         "2023-turner-actadd.md",
+        "2024-heimersheim-actpatch.md",
         "2024-arditi-refusal.md"
       ]
     },
     {
-      "slide_id": 11,
+      "slide_id": 12,
       "title": "限制與防過度宣稱",
       "goal": "帶出跨篇限制，讓後續簡報描述效果時保留必要邊界。",
       "key_points": [
@@ -142,6 +155,7 @@
         "2023-cunningham-sae.md",
         "2023-li-iti.md",
         "2023-turner-actadd.md",
+        "2024-heimersheim-actpatch.md",
         "2024-arditi-refusal.md"
       ]
     }

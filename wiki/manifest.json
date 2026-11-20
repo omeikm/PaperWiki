@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-20T12:55:40.863754+00:00",
-  "total_notes": 8,
+  "generated_at": "2026-11-20T13:55:41.588964+00:00",
+  "total_notes": 9,
   "notes": [
     {
       "id": "2019-reimers-sbert",
@@ -30,7 +30,7 @@
       "year": "2023",
       "venue_and_year": "arXiv 2023",
       "tags": "#Sparse Autoencoders, #Mechanistic Interpretability, #Superposition, #Feature Dictionaries",
-      "synthesis_citation_count": 8
+      "synthesis_citation_count": 9
     },
     {
       "id": "2023-li-iti",
@@ -40,7 +40,7 @@
       "year": "2023",
       "venue_and_year": "NeurIPS 2023",
       "tags": "#Representation Learning, #AI Safety, #Truthfulness, #Activation Editing",
-      "synthesis_citation_count": 7
+      "synthesis_citation_count": 8
     },
     {
       "id": "2023-turner-actadd",
@@ -50,7 +50,7 @@
       "year": "2023",
       "venue_and_year": "arXiv 2023",
       "tags": "#Activation Engineering, #Representation Engineering, #Activation Addition, #AI Safety",
-      "synthesis_citation_count": 5
+      "synthesis_citation_count": 6
     },
     {
       "id": "2023-zou-repe",
@@ -81,6 +81,16 @@
       "venue_and_year": "2024",
       "tags": "#Representation Learning, #Large Language Models, #Text Embeddings, #NLP",
       "synthesis_citation_count": 6
+    },
+    {
+      "id": "2024-heimersheim-actpatch",
+      "filename": "2024-heimersheim-actpatch.md",
+      "path": "notes/2024-heimersheim-actpatch.md",
+      "title": "How to use and interpret activation patching",
+      "year": "2024",
+      "venue_and_year": "arXiv 2024",
+      "tags": "#Mechanistic Interpretability, #Activation Patching, #Causal Interventions, #Circuit Analysis",
+      "synthesis_citation_count": 5
     }
   ]
 }

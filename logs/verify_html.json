@@ -1,6 +1,6 @@
 {
   "step": "verify_html",
-  "generated_at": "2026-11-20T13:11:33.413165+00:00",
+  "generated_at": "2026-11-20T13:57:16.370347+00:00",
   "overall_status": "PASS",
   "errors": [],
   "warnings": [],
@@ -8,7 +8,7 @@
     {
       "name": "slide_count",
       "status": "PASS",
-      "detail": "HTML 與 JSON 均為 11 頁"
+      "detail": "HTML 與 JSON 均為 12 頁"
     },
     {
       "name": "placeholder_check",

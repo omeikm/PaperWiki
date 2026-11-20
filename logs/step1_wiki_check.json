@@ -1,6 +1,6 @@
 {
   "step": "step1_wiki",
-  "generated_at": "2026-11-20T12:55:40.864756+00:00",
+  "generated_at": "2026-11-20T13:55:41.589965+00:00",
   "overall_status": "PASS",
   "errors": [],
   "warnings": [],
@@ -8,12 +8,12 @@
     {
       "name": "min_notes_count",
       "status": "PASS",
-      "detail": "共 8 篇筆記"
+      "detail": "共 9 篇筆記"
     },
     {
       "name": "citation_validity",
       "status": "PASS",
-      "detail": "共 55 處引用皆合法"
+      "detail": "共 63 處引用皆合法"
     },
     {
       "name": "citation_coverage",
