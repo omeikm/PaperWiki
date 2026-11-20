@@ -35,7 +35,7 @@
           <p class="eyebrow">THE LIBRARY</p>
           <h2 id="library-title">論文書架</h2>
         </div>
-        <p class="library-count"><span id="visible-count">3</span> 篇筆記</p>
+        <p class="library-count"><span id="visible-count">5</span> 篇筆記</p>
       </div>
 
       <div class="filter-panel">
@@ -49,10 +49,49 @@
           <button class="filter-chip" type="button" data-filter="Large Language Models" aria-pressed="false">Large Language Models</button>
           <button class="filter-chip" type="button" data-filter="Text Embeddings" aria-pressed="false">Text Embeddings</button>
           <button class="filter-chip" type="button" data-filter="Siamese Networks" aria-pressed="false">Siamese Networks</button>
+          <button class="filter-chip" type="button" data-filter="AI Safety" aria-pressed="false">AI Safety</button>
+          <button class="filter-chip" type="button" data-filter="Mechanistic Interpretability" aria-pressed="false">Mechanistic Interpretability</button>
+          <button class="filter-chip" type="button" data-filter="Representation Engineering" aria-pressed="false">Representation Engineering</button>
+          <button class="filter-chip" type="button" data-filter="LLM Jailbreak" aria-pressed="false">LLM Jailbreak</button>
+          <button class="filter-chip" type="button" data-filter="AI Transparency" aria-pressed="false">AI Transparency</button>
         </div>
       </div>
 
       <div class="paper-grid" aria-live="polite">
+        <article class="paper-card" data-paper-card data-tags="AI Safety|Mechanistic Interpretability|Representation Engineering|LLM Jailbreak">
+          <div class="card-topline">
+            <span class="paper-year">2024 <span aria-hidden="true">·</span> NeurIPS</span>
+            <span class="card-index">03</span>
+          </div>
+          <h3><a href="papers/2024-arditi-refusal.html">Refusal in Language Models Is Mediated by a Single Direction</a></h3>
+          <p class="card-translation">語言模型中的拒絕行為由單一方向中介</p>
+          <p class="card-summary">發現拒絕行為可由殘差流中的單一表示方向中介，並提出 weight orthogonalization 的白盒 jailbreak 方法。</p>
+          <div class="card-tags" aria-label="論文標籤">
+            <span># AI Safety</span>
+            <span># Mechanistic Interpretability</span>
+          </div>
+          <div class="card-footer">
+            <span>Andy Arditi et al.</span>
+            <a class="card-link" href="papers/2024-arditi-refusal.html" aria-label="閱讀 Refusal in Language Models 論文筆記">閱讀筆記 <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+        <article class="paper-card" data-paper-card data-tags="Representation Engineering|Mechanistic Interpretability|AI Transparency|AI Safety">
+          <div class="card-topline">
+            <span class="paper-year">2023 <span aria-hidden="true">·</span> arXiv</span>
+            <span class="card-index">04</span>
+          </div>
+          <h3><a href="papers/2023-zou-repe.html">Representation Engineering: A Top-Down Approach to AI Transparency</a></h3>
+          <p class="card-translation">表示工程：以由上而下的方法提升 AI 透明度</p>
+          <p class="card-summary">提出以表示為核心的 top-down 透明度框架，透過 LAT 讀取並控制 honesty、hallucination 等高階認知現象。</p>
+          <div class="card-tags" aria-label="論文標籤">
+            <span># Representation Engineering</span>
+            <span># AI Safety</span>
+          </div>
+          <div class="card-footer">
+            <span>Andy Zou et al.</span>
+            <a class="card-link" href="papers/2023-zou-repe.html" aria-label="閱讀 Representation Engineering 論文筆記">閱讀筆記 <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
         <article class="paper-card" data-paper-card data-tags="Representation Learning|Sentence Embeddings|Siamese Networks|NLP">
           <div class="card-topline">
             <span class="paper-year">2019 <span aria-hidden="true">·</span> EMNLP-IJCNLP</span>
@@ -90,7 +129,7 @@
         <article class="paper-card" data-paper-card data-tags="Representation Learning|Contrastive Learning|Sentence Embeddings|NLP">
           <div class="card-topline">
             <span class="paper-year">2021 <span aria-hidden="true">·</span> EMNLP</span>
-            <span class="card-index">03</span>
+            <span class="card-index">05</span>
           </div>
           <h3><a href="papers/2021-gao-simcse.html">SimCSE: Simple Contrastive Learning of Sentence Embeddings</a></h3>
           <p class="card-translation">SimCSE：簡單對比式句向量學習</p>
